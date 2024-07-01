@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "594013738919",
+    "project_id": "instacard-gwf",
+    "storage_bucket": "instacard-gwf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:594013738919:android:7c9aa0d5ca16ddd1bc8882",
+        "android_client_info": {
+          "package_name": "com.example.instacard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbqovjLLupEPhXCMuC9TLOiPYx5LJ-pcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
