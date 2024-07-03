@@ -61,6 +61,7 @@ class FooForm extends StatelessWidget {
                           return ElevatedButton(
                             onPressed: formModel.form.valid
                                 ? () async {
+                                    print(formModel.form.value);
                                     await locator<FooService>()
                                         .create(formModel.model);
                                     formModel.form.reset();
