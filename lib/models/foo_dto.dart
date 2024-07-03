@@ -47,6 +47,26 @@ class FooDto with _$FooDto {
   // ignore: recursive_getters, annotate_overrides
   Id get id => id;
 
+  @ignore
+  get allowCreate => id < 0 ? true : false;
+
+  @ignore
+  get allowUpdate => id > 0 ? true : false;
+
+  Future<FooDto> saveFeaturedImage() async {
+    FooDto item = this;
+    if (featuredImage.isNotEmpty) {
+      if (await deleteImageFromLocal(featuredImage)) {
+        item = copyWith(featuredImage: "");
+      }
+    }
+    if (featuredImageUpload.isNotEmpty) {
+      final filePath = await saveImageToLocal(featuredImageUpload[0].file);
+      item = copyWith(featuredImage: filePath);
+    }
+    return item;
+  }
+
   factory FooDto.fromJson(Map<String, dynamic> json) =>
       _$FooDtoFromJson(json.map((key, value) => MapEntry(
           key, key == 'id' && value is String ? fastHash(value) : value)));
@@ -57,10 +77,14 @@ class FooDto with _$FooDto {
 
   FooDto toForm() {
     return copyWith(
-        colorPick: Color(color),
+        colorPick: color == 0xffef5350 ? Colors.red : Colors.orange,
         featuredImageUpload: featuredImage.isEmpty
             ? []
-            : [SelectedFile.image(file: XFile(featuredImage.toString()))]);
+            : [
+                SelectedFile.image(
+                  url: featuredImage.toString(),
+                )
+              ]);
   }
 
   factory FooDto.fromFirestore(

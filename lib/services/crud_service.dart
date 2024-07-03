@@ -10,10 +10,17 @@ abstract class CrudService<T> with ListenableServiceMixin {
   final ReactiveValue<T?> _selectedItem = ReactiveValue<T?>(null);
 
   List<T> get items => _items.value;
-  set items(List<T> i) => _items.value = i;
+  set items(List<T> i) {
+    _items.value = i;
+    notifyListeners();
+  }
 
   T? get selectedItem => _selectedItem.value;
-  set selectedItem(T? i) => _selectedItem.value = i;
+  set selectedItem(T? i) {
+    _selectedItem.value = i;
+    notifyListeners();
+  }
+
   Future fetchAll();
   Future<T?> findById(int id);
   Future create(T item);

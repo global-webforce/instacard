@@ -74,3 +74,16 @@ Future<String> saveImageToLocal(XFile? featuredImageUpload) async {
   }
   return "";
 }
+
+Future<bool> deleteImageFromLocal(String filePath) async {
+  try {
+    final file = File(filePath);
+    if (await file.exists()) {
+      await file.delete();
+      return true;
+    }
+    return false;
+  } catch (e) {
+    return false;
+  }
+}

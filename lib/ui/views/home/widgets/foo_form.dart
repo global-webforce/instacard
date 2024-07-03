@@ -17,6 +17,7 @@ class FooForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = getParentViewModel<HomeViewModel>(context);
     return FooDtoFormBuilder(
+        key: UniqueKey(),
         model: viewModel.selectedItem ?? FooDto(),
         builder: (context, formModel, child) {
           return Card(
@@ -45,10 +46,18 @@ class FooForm extends StatelessWidget {
                               'Title must not be empty',
                         },
                       ),
-                      ReactiveMaterialColorPicker(
-                        formControl: formModel.colorPickControl,
-                        pickerColor: Colors.amber,
-                      ),
+                      ReactiveBlockColorPicker(
+                          pickerColor: Colors.orange,
+                          availableColors: const [
+                            Colors.red,
+                            Colors.orange,
+                            Colors.blue,
+                            Colors.purple,
+                            Colors.brown,
+                            Colors.grey
+                          ],
+                          formControl: formModel.colorPickControl,
+                          key: const ValueKey('qweqweqe')),
                       ReactiveTextField<String>(
                         formControl: formModel.titleControl,
                         decoration: const InputDecoration(
@@ -80,22 +89,23 @@ class FooForm extends StatelessWidget {
                           return Column(
                             children: [
                               Text(formModel.form.pristine.toString()),
-                              if (viewModel.selectedItem?.createdAt == null)
+                              if (formModel.model.allowCreate)
                                 ElevatedButton(
                                   onPressed: formModel.form.valid
                                       ? () async {
                                           await locator<FooService>()
                                               .create(formModel.model);
-
+                                          viewModel.selectedItem = FooDto();
                                           formModel.form
                                               .reset(removeFocus: true);
-                                          formModel.updateValue(FooDto());
-                                          viewModel.selectedItem = FooDto();
+
+                                          formModel.updateValue(
+                                              viewModel.selectedItem);
                                         }
                                       : null,
                                   child: const Text('CREATE'),
                                 ),
-                              if (viewModel.selectedItem?.createdAt != null)
+                              if (formModel.model.allowUpdate)
                                 ElevatedButton(
                                   onPressed: formModel.form.valid
                                       ? () async {
@@ -121,8 +131,7 @@ class FooForm extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () {
                           formModel.form.reset(removeFocus: true);
-                          formModel.updateValue(FooDto());
-                          viewModel.selectedItem = FooDto();
+                          viewModel.selectedItem = FooDto().toForm();
                         },
                         child: const Text('RESET'),
                       ),
@@ -225,6 +234,13 @@ class FeaturedImagePicker extends StatelessWidget {
               break;
           }
         }
+      },
+      selectedValueBuilder: (image, handleDelete, handleChange) {
+        return Container(
+          height: 200,
+          width: 200,
+          color: Colors.amber,
+        );
       },
       inputBuilder: (onPressed) => TextButton.icon(
         onPressed: onPressed,
