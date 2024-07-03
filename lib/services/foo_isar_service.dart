@@ -42,10 +42,11 @@ class FooIsarService extends FooService implements InitializableDependency {
       await isar.fooDtos.put(item.copyWith(
           featuredImage: featuredImage,
           createdAt: Timestamp.now().toDate(),
-          color: item.colorPick.value));
+          color: item.colorPick?.value ?? Colors.red.value));
     });
+
     selectedItem = item;
-    print(selectedItem);
+
     await fetchAll();
   }
 

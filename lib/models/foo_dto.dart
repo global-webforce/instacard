@@ -33,7 +33,7 @@ class FooDto with _$FooDto {
     )
     @RfControl()
     @Default(Colors.red)
-    Color colorPick,
+    Color? colorPick,
     @JsonKey(
       includeFromJson: false,
       includeToJson: false,

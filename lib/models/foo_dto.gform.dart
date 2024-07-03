@@ -242,7 +242,7 @@ class FooDtoForm implements FormModel<FooDto> {
 
   DateTime? get _updatedAtValue => updatedAtControl?.value;
 
-  Color get _colorPickValue => colorPickControl.value as Color;
+  Color? get _colorPickValue => colorPickControl?.value;
 
   List<SelectedFile> get _featuredImageUploadValue =>
       featuredImageUploadControl.value as List<SelectedFile>;
@@ -342,7 +342,7 @@ class FooDtoForm implements FormModel<FooDto> {
 
   Map<String, Object>? get updatedAtErrors => updatedAtControl?.errors;
 
-  Map<String, Object> get colorPickErrors => colorPickControl.errors;
+  Map<String, Object>? get colorPickErrors => colorPickControl?.errors;
 
   Map<String, Object> get featuredImageUploadErrors =>
       featuredImageUploadControl.errors;
@@ -418,6 +418,32 @@ class FooDtoForm implements FormModel<FooDto> {
     }
   }
 
+  void colorPickRemove({
+    bool updateParent = true,
+    bool emitEvent = true,
+  }) {
+    if (containsColorPick) {
+      final controlPath = path;
+      if (controlPath == null) {
+        form.removeControl(
+          colorPickControlName,
+          updateParent: updateParent,
+          emitEvent: emitEvent,
+        );
+      } else {
+        final formGroup = form.control(controlPath);
+
+        if (formGroup is FormGroup) {
+          formGroup.removeControl(
+            colorPickControlName,
+            updateParent: updateParent,
+            emitEvent: emitEvent,
+          );
+        }
+      }
+    }
+  }
+
   void idValueUpdate(
     int value, {
     bool updateParent = true,
@@ -482,11 +508,11 @@ class FooDtoForm implements FormModel<FooDto> {
   }
 
   void colorPickValueUpdate(
-    Color value, {
+    Color? value, {
     bool updateParent = true,
     bool emitEvent = true,
   }) {
-    colorPickControl.updateValue(value,
+    colorPickControl?.updateValue(value,
         updateParent: updateParent, emitEvent: emitEvent);
   }
 
@@ -563,11 +589,11 @@ class FooDtoForm implements FormModel<FooDto> {
   }
 
   void colorPickValuePatch(
-    Color value, {
+    Color? value, {
     bool updateParent = true,
     bool emitEvent = true,
   }) {
-    colorPickControl.patchValue(value,
+    colorPickControl?.patchValue(value,
         updateParent: updateParent, emitEvent: emitEvent);
   }
 
@@ -651,13 +677,13 @@ class FooDtoForm implements FormModel<FooDto> {
           value: value, updateParent: updateParent, emitEvent: emitEvent);
 
   void colorPickValueReset(
-    Color value, {
+    Color? value, {
     bool updateParent = true,
     bool emitEvent = true,
     bool removeFocus = false,
     bool? disabled,
   }) =>
-      colorPickControl.reset(
+      colorPickControl?.reset(
           value: value, updateParent: updateParent, emitEvent: emitEvent);
 
   void featuredImageUploadValueReset(
@@ -693,8 +719,9 @@ class FooDtoForm implements FormModel<FooDto> {
       ? form.control(updatedAtControlPath()) as FormControl<DateTime>?
       : null;
 
-  FormControl<Color> get colorPickControl =>
-      form.control(colorPickControlPath()) as FormControl<Color>;
+  FormControl<Color>? get colorPickControl => containsColorPick
+      ? form.control(colorPickControlPath()) as FormControl<Color>?
+      : null;
 
   FormControl<List<SelectedFile>> get featuredImageUploadControl =>
       form.control(featuredImageUploadControlPath())
@@ -832,12 +859,12 @@ class FooDtoForm implements FormModel<FooDto> {
     bool emitEvent = true,
   }) {
     if (disabled) {
-      colorPickControl.markAsDisabled(
+      colorPickControl?.markAsDisabled(
         updateParent: updateParent,
         emitEvent: emitEvent,
       );
     } else {
-      colorPickControl.markAsEnabled(
+      colorPickControl?.markAsEnabled(
         updateParent: updateParent,
         emitEvent: emitEvent,
       );

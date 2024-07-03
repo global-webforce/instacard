@@ -37,7 +37,7 @@ mixin _$FooDto {
   @ignore
   @JsonKey(includeFromJson: false, includeToJson: false)
   @RfControl()
-  Color get colorPick => throw _privateConstructorUsedError;
+  Color? get colorPick => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
   @ignore
   @RfControl()
@@ -65,7 +65,7 @@ abstract class $FooDtoCopyWith<$Res> {
       @ignore
       @JsonKey(includeFromJson: false, includeToJson: false)
       @RfControl()
-      Color colorPick,
+      Color? colorPick,
       @JsonKey(includeFromJson: false, includeToJson: false)
       @ignore
       @RfControl()
@@ -92,7 +92,7 @@ class _$FooDtoCopyWithImpl<$Res, $Val extends FooDto>
     Object? featuredImage = null,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
-    Object? colorPick = null,
+    Object? colorPick = freezed,
     Object? featuredImageUpload = null,
   }) {
     return _then(_value.copyWith(
@@ -124,10 +124,10 @@ class _$FooDtoCopyWithImpl<$Res, $Val extends FooDto>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      colorPick: null == colorPick
+      colorPick: freezed == colorPick
           ? _value.colorPick
           : colorPick // ignore: cast_nullable_to_non_nullable
-              as Color,
+              as Color?,
       featuredImageUpload: null == featuredImageUpload
           ? _value.featuredImageUpload
           : featuredImageUpload // ignore: cast_nullable_to_non_nullable
@@ -154,7 +154,7 @@ abstract class _$$FooDtoImplCopyWith<$Res> implements $FooDtoCopyWith<$Res> {
       @ignore
       @JsonKey(includeFromJson: false, includeToJson: false)
       @RfControl()
-      Color colorPick,
+      Color? colorPick,
       @JsonKey(includeFromJson: false, includeToJson: false)
       @ignore
       @RfControl()
@@ -179,7 +179,7 @@ class __$$FooDtoImplCopyWithImpl<$Res>
     Object? featuredImage = null,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
-    Object? colorPick = null,
+    Object? colorPick = freezed,
     Object? featuredImageUpload = null,
   }) {
     return _then(_$FooDtoImpl(
@@ -211,10 +211,10 @@ class __$$FooDtoImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      colorPick: null == colorPick
+      colorPick: freezed == colorPick
           ? _value.colorPick
           : colorPick // ignore: cast_nullable_to_non_nullable
-              as Color,
+              as Color?,
       featuredImageUpload: null == featuredImageUpload
           ? _value._featuredImageUpload
           : featuredImageUpload // ignore: cast_nullable_to_non_nullable
@@ -278,7 +278,7 @@ class _$FooDtoImpl extends _FooDto {
   @ignore
   @JsonKey(includeFromJson: false, includeToJson: false)
   @RfControl()
-  final Color colorPick;
+  final Color? colorPick;
   final List<SelectedFile> _featuredImageUpload;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -357,7 +357,7 @@ abstract class _FooDto extends FooDto {
       @ignore
       @JsonKey(includeFromJson: false, includeToJson: false)
       @RfControl()
-      final Color colorPick,
+      final Color? colorPick,
       @JsonKey(includeFromJson: false, includeToJson: false)
       @ignore
       @RfControl()
@@ -391,7 +391,7 @@ abstract class _FooDto extends FooDto {
   @ignore
   @JsonKey(includeFromJson: false, includeToJson: false)
   @RfControl()
-  Color get colorPick;
+  Color? get colorPick;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @ignore

@@ -17,7 +17,7 @@ class FooForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = getParentViewModel<HomeViewModel>(context);
     return FooDtoFormBuilder(
-        model: viewModel.selectedItem,
+        model: viewModel.selectedItem ?? FooDto(),
         builder: (context, formModel, child) {
           return Card(
               margin: const EdgeInsets.all(0),
@@ -47,6 +47,7 @@ class FooForm extends StatelessWidget {
                       ),
                       ReactiveMaterialColorPicker(
                         formControl: formModel.colorPickControl,
+                        pickerColor: Colors.amber,
                       ),
                       ReactiveTextField<String>(
                         formControl: formModel.titleControl,
@@ -98,11 +99,15 @@ class FooForm extends StatelessWidget {
                                 ElevatedButton(
                                   onPressed: formModel.form.valid
                                       ? () async {
-                                          await locator<FooService>()
-                                              .create(formModel.model);
+                                          await locator<FooService>().create(
+                                              formModel.model.copyWith(
+                                                  colorPick: formModel
+                                                          .model.colorPick ??
+                                                      Colors.red));
 
                                           formModel.form
                                               .reset(removeFocus: true);
+
                                           formModel.updateValue(
                                               viewModel.selectedItem);
                                         }
