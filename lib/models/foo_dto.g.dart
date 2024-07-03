@@ -17,28 +17,33 @@ const FooDtoSchema = CollectionSchema(
   name: r'FooDto',
   id: -464633714525894134,
   properties: {
-    r'createdAt': PropertySchema(
+    r'color': PropertySchema(
       id: 0,
+      name: r'color',
+      type: IsarType.long,
+    ),
+    r'createdAt': PropertySchema(
+      id: 1,
       name: r'createdAt',
       type: IsarType.dateTime,
     ),
     r'excerpt': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'excerpt',
       type: IsarType.string,
     ),
     r'featuredImage': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'featuredImage',
       type: IsarType.string,
     ),
     r'title': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'title',
       type: IsarType.string,
     ),
     r'updatedAt': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'updatedAt',
       type: IsarType.dateTime,
     )
@@ -75,11 +80,12 @@ void _fooDtoSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeDateTime(offsets[0], object.createdAt);
-  writer.writeString(offsets[1], object.excerpt);
-  writer.writeString(offsets[2], object.featuredImage);
-  writer.writeString(offsets[3], object.title);
-  writer.writeDateTime(offsets[4], object.updatedAt);
+  writer.writeLong(offsets[0], object.color);
+  writer.writeDateTime(offsets[1], object.createdAt);
+  writer.writeString(offsets[2], object.excerpt);
+  writer.writeString(offsets[3], object.featuredImage);
+  writer.writeString(offsets[4], object.title);
+  writer.writeDateTime(offsets[5], object.updatedAt);
 }
 
 FooDto _fooDtoDeserialize(
@@ -89,12 +95,13 @@ FooDto _fooDtoDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = FooDto(
-    createdAt: reader.readDateTimeOrNull(offsets[0]),
-    excerpt: reader.readString(offsets[1]),
-    featuredImage: reader.readString(offsets[2]),
+    color: reader.readLong(offsets[0]),
+    createdAt: reader.readDateTimeOrNull(offsets[1]),
+    excerpt: reader.readString(offsets[2]),
+    featuredImage: reader.readString(offsets[3]),
     id: id,
-    title: reader.readString(offsets[3]),
-    updatedAt: reader.readDateTimeOrNull(offsets[4]),
+    title: reader.readString(offsets[4]),
+    updatedAt: reader.readDateTimeOrNull(offsets[5]),
   );
   return object;
 }
@@ -107,14 +114,16 @@ P _fooDtoDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 1:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 2:
       return (reader.readString(offset)) as P;
     case 3:
       return (reader.readString(offset)) as P;
     case 4:
+      return (reader.readString(offset)) as P;
+    case 5:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -207,6 +216,58 @@ extension FooDtoQueryWhere on QueryBuilder<FooDto, FooDto, QWhereClause> {
 }
 
 extension FooDtoQueryFilter on QueryBuilder<FooDto, FooDto, QFilterCondition> {
+  QueryBuilder<FooDto, FooDto, QAfterFilterCondition> colorEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'color',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FooDto, FooDto, QAfterFilterCondition> colorGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'color',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FooDto, FooDto, QAfterFilterCondition> colorLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'color',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<FooDto, FooDto, QAfterFilterCondition> colorBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'color',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<FooDto, FooDto, QAfterFilterCondition> createdAtIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -794,6 +855,18 @@ extension FooDtoQueryObject on QueryBuilder<FooDto, FooDto, QFilterCondition> {}
 extension FooDtoQueryLinks on QueryBuilder<FooDto, FooDto, QFilterCondition> {}
 
 extension FooDtoQuerySortBy on QueryBuilder<FooDto, FooDto, QSortBy> {
+  QueryBuilder<FooDto, FooDto, QAfterSortBy> sortByColor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'color', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FooDto, FooDto, QAfterSortBy> sortByColorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'color', Sort.desc);
+    });
+  }
+
   QueryBuilder<FooDto, FooDto, QAfterSortBy> sortByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.asc);
@@ -856,6 +929,18 @@ extension FooDtoQuerySortBy on QueryBuilder<FooDto, FooDto, QSortBy> {
 }
 
 extension FooDtoQuerySortThenBy on QueryBuilder<FooDto, FooDto, QSortThenBy> {
+  QueryBuilder<FooDto, FooDto, QAfterSortBy> thenByColor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'color', Sort.asc);
+    });
+  }
+
+  QueryBuilder<FooDto, FooDto, QAfterSortBy> thenByColorDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'color', Sort.desc);
+    });
+  }
+
   QueryBuilder<FooDto, FooDto, QAfterSortBy> thenByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'createdAt', Sort.asc);
@@ -930,6 +1015,12 @@ extension FooDtoQuerySortThenBy on QueryBuilder<FooDto, FooDto, QSortThenBy> {
 }
 
 extension FooDtoQueryWhereDistinct on QueryBuilder<FooDto, FooDto, QDistinct> {
+  QueryBuilder<FooDto, FooDto, QDistinct> distinctByColor() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'color');
+    });
+  }
+
   QueryBuilder<FooDto, FooDto, QDistinct> distinctByCreatedAt() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'createdAt');
@@ -972,6 +1063,12 @@ extension FooDtoQueryProperty on QueryBuilder<FooDto, FooDto, QQueryProperty> {
     });
   }
 
+  QueryBuilder<FooDto, int, QQueryOperations> colorProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'color');
+    });
+  }
+
   QueryBuilder<FooDto, DateTime?, QQueryOperations> createdAtProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'createdAt');
@@ -1011,6 +1108,7 @@ _$FooDtoImpl _$$FooDtoImplFromJson(Map<String, dynamic> json) => _$FooDtoImpl(
       id: (json['id'] as num?)?.toInt() ?? Isar.autoIncrement,
       title: json['title'] as String? ?? '',
       excerpt: json['excerpt'] as String? ?? '',
+      color: (json['color'] as num?)?.toInt() ?? 0xffef5350,
       featuredImage: json['featuredImage'] as String? ?? '',
       createdAt: json['createdAt'] == null
           ? null
@@ -1025,6 +1123,7 @@ Map<String, dynamic> _$$FooDtoImplToJson(_$FooDtoImpl instance) =>
       'id': instance.id,
       'title': instance.title,
       'excerpt': instance.excerpt,
+      'color': instance.color,
       'featuredImage': instance.featuredImage,
       'createdAt': instance.createdAt?.toIso8601String(),
       'updatedAt': instance.updatedAt?.toIso8601String(),

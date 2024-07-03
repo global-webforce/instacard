@@ -4,17 +4,18 @@ import 'package:instacard/app/app.locator.dart';
 import 'package:instacard/models/foo_dto.dart';
 import 'package:instacard/services/foo_service.dart';
 import 'package:instacard/ui/common/ui_helpers.dart';
+import 'package:reactive_color_picker/reactive_color_picker.dart';
 import 'package:reactive_forms_annotations/reactive_forms_annotations.dart';
 import 'package:reactive_image_picker/reactive_image_picker.dart';
 
 class FooForm extends StatelessWidget {
-  final Map<String, dynamic> value;
-  const FooForm({super.key, required this.value});
+  final FooDto model;
+  const FooForm({super.key, required this.model});
 
   @override
   Widget build(BuildContext context) {
     return FooDtoFormBuilder(
-        model: FooDto(),
+        model: model,
         builder: (context, formModel, child) {
           return Card(
               margin: const EdgeInsets.all(0),
@@ -22,8 +23,12 @@ class FooForm extends StatelessWidget {
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
                     children: [
-                      FeaturedImagePicker(
-                        formControl: formModel.featuredImageUploadControl,
+                      ReactiveFooDtoFormConsumer(
+                          builder: (context, formModel, child) {
+                        return Text(formModel.form.pristine.toString());
+                      }),
+                      ReactiveMaterialColorPicker<Color>(
+                        formControl: formModel.colorPickControl,
                       ),
                       ReactiveTextField<String>(
                         formControl: formModel.titleControl,
@@ -46,15 +51,21 @@ class FooForm extends StatelessWidget {
                               'Excerpt must not be empty',
                         },
                       ),
+                      vSpaceMedium,
+                      FeaturedImagePicker(
+                        formControl: formModel.featuredImageUploadControl,
+                      ),
                       vSpaceSmall,
                       ReactiveFooDtoFormConsumer(
                         builder: (context, formModel, child) {
                           return ElevatedButton(
                             onPressed: formModel.form.valid
                                 ? () async {
-                                    await locator<FooService>().create(
-                                        FooDto.fromJson(formModel.form.value));
+                                    await locator<FooService>()
+                                        .create(formModel.model);
                                     formModel.form.reset();
+                                    formModel.updateValue(FooDto());
+                                    formModel.form.unfocus();
                                   }
                                 : null,
                             child: const Text('CONTINUE'),
@@ -62,7 +73,11 @@ class FooForm extends StatelessWidget {
                         },
                       ),
                       ElevatedButton(
-                        onPressed: () => formModel.reset(),
+                        onPressed: () {
+                          formModel.form.reset();
+                          formModel.updateValue(FooDto());
+                          formModel.form.unfocus();
+                        },
                         child: const Text('RESET'),
                       ),
                     ],

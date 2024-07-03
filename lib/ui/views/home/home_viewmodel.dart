@@ -24,9 +24,10 @@ class HomeViewModel extends ReactiveViewModel {
 
   List<FooDto> get foos => _fooService.items;
 
-  Map<String, dynamic> formValue = {};
-  view(Map<String, dynamic> value) {
-    formValue = value;
+  FooDto _selectedItem = FooDto();
+  FooDto get selectedItem => _selectedItem.toForm();
+  set selectedItem(FooDto item) {
+    _selectedItem = item;
     rebuildUi();
   }
 

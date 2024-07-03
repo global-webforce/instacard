@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: ae92f5d747aee634b87f89d9946000c2de774be1d6ac3e58268224348cd0101a
+      sha256: "0b2f2bd91ba804e53a61d757b986f89f1f9eaed5b11e4b2f5a2468d86d6c9fc7"
       url: "https://pub.dev"
     source: hosted
-    version: "61.0.0"
+    version: "67.0.0"
   _flutterfire_internals:
     dependency: transitive
     description:
@@ -18,13 +18,13 @@ packages:
     source: hosted
     version: "1.3.35"
   analyzer:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: analyzer
-      sha256: ea3d8652bda62982addfd92fdc2d0214e5f82e43325104990d4f4c4a2a313562
+      sha256: "37577842a27e4338429a1cbc32679d508836510b056f1eedf0c8d20e39c1383d"
       url: "https://pub.dev"
     source: hosted
-    version: "5.13.0"
+    version: "6.4.1"
   app_settings:
     dependency: transitive
     description:
@@ -221,10 +221,10 @@ packages:
     dependency: transitive
     description:
       name: dart_style
-      sha256: "1efa911ca7086affd35f463ca2fc1799584fb6aa89883cf0af8e3664d6a02d55"
+      sha256: "99e066ce75c89d6b29903d788a7bb9369cf754f7b24bf70bf4b6d6d6b26853b9"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.2"
+    version: "2.3.6"
   dartx:
     dependency: transitive
     description:
@@ -382,6 +382,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_colorpicker:
+    dependency: transitive
+    description:
+      name: flutter_colorpicker
+      sha256: "969de5f6f9e2a570ac660fb7b501551451ea2a1ab9e2097e89475f60e07816ea"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   flutter_facebook_auth:
     dependency: transitive
     description:
@@ -486,7 +494,7 @@ packages:
     source: sdk
     version: "0.0.0"
   freezed:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: freezed
       sha256: a434911f643466d78462625df76fd9eb13e57348ff43fe1f77bbe909522c67a1
@@ -957,6 +965,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
+  reactive_color_picker:
+    dependency: "direct main"
+    description:
+      name: reactive_color_picker
+      sha256: "175889c7a0435de18d56dd3e821bb0e398ca25ae4895f02baef95289bf4a1acb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   reactive_forms:
     dependency: "direct main"
     description:
@@ -977,10 +993,10 @@ packages:
     dependency: "direct main"
     description:
       name: reactive_forms_generator
-      sha256: "162ba1b331e43657cd128629feec6473e8ec26fa96944714b0c08b12beba4df1"
+      sha256: c87ee47699d9008fc404e760c9807b999016d7b9bca2595c2eff2397a7db1067
       url: "https://pub.dev"
     source: hosted
-    version: "4.8.0"
+    version: "5.0.4"
   reactive_image_picker:
     dependency: "direct main"
     description:
@@ -1150,10 +1166,10 @@ packages:
     dependency: "direct dev"
     description:
       name: stacked_generator
-      sha256: c141baf56cb7168dfde142d3578118c7bf914be9fb62bc8593344e97894ac8f9
+      sha256: ed9fcada06d97def2fe2d9d1df620da17a7c01a6b319fe115e035c2ac1a9f2c8
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.1"
+    version: "1.6.0"
   stacked_services:
     dependency: "direct main"
     description:

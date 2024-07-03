@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:instacard/helpers/freezed_helpers.dart';
 import 'package:instacard/models/foo_dto.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,20 +32,17 @@ class FooIsarService extends FooService implements InitializableDependency {
   @override
   Future create(FooDto item) async {
     final isar = await _db;
-    final image = item.featuredImageUpload?[0];
 
-    String filePath = "";
-    if (image != null) {
-      final fileName = path.basename("${image.file?.name}");
-      final dir = await getApplicationDocumentsDirectory();
-      await image.file?.saveTo(path.join(dir.path, fileName));
+    String featuredImage = "";
+    for (var i = 0; i < item.featuredImageUpload.length; i++) {
+      featuredImage = await saveImageToLocal(item.featuredImageUpload[i].file);
     }
 
     await isar.writeTxn(() async {
       await isar.fooDtos.put(item.copyWith(
-        createdAt: Timestamp.now().toDate(),
-        featuredImage: filePath,
-      ));
+          featuredImage: featuredImage,
+          createdAt: Timestamp.now().toDate(),
+          color: item.colorPick.value));
     });
     await fetchAll();
   }

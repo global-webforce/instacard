@@ -52,14 +52,17 @@ class ReactiveFooDtoForm extends StatelessWidget {
     Key? key,
     required this.form,
     required this.child,
-    this.onWillPop,
+    this.canPop,
+    this.onPopInvoked,
   }) : super(key: key);
 
   final Widget child;
 
   final FooDtoForm form;
 
-  final WillPopCallback? onWillPop;
+  final bool Function(FormGroup formGroup)? canPop;
+
+  final void Function(FormGroup formGroup, bool didPop)? onPopInvoked;
 
   static FooDtoForm? of(
     BuildContext context, {
@@ -83,8 +86,9 @@ class ReactiveFooDtoForm extends StatelessWidget {
     return FooDtoFormInheritedStreamer(
       form: form,
       stream: form.form.statusChanged,
-      child: WillPopScope(
-        onWillPop: onWillPop,
+      child: ReactiveFormPopScope(
+        canPop: canPop,
+        onPopInvoked: onPopInvoked,
         child: child,
       ),
     );
@@ -102,7 +106,8 @@ class FooDtoFormBuilder extends StatefulWidget {
     Key? key,
     this.model,
     this.child,
-    this.onWillPop,
+    this.canPop,
+    this.onPopInvoked,
     required this.builder,
     this.initState,
   }) : super(key: key);
@@ -111,7 +116,9 @@ class FooDtoFormBuilder extends StatefulWidget {
 
   final Widget? child;
 
-  final WillPopCallback? onWillPop;
+  final bool Function(FormGroup formGroup)? canPop;
+
+  final void Function(FormGroup formGroup, bool didPop)? onPopInvoked;
 
   final Widget Function(
       BuildContext context, FooDtoForm formModel, Widget? child) builder;
@@ -158,10 +165,12 @@ class _FooDtoFormBuilderState extends State<FooDtoFormBuilder> {
     return ReactiveFooDtoForm(
       key: ObjectKey(_formModel),
       form: _formModel,
-      onWillPop: widget.onWillPop,
+      // canPop: widget.canPop,
+      // onPopInvoked: widget.onPopInvoked,
       child: ReactiveFormBuilder(
         form: () => _formModel.form,
-        onWillPop: widget.onWillPop,
+        canPop: widget.canPop,
+        onPopInvoked: widget.onPopInvoked,
         builder: (context, formGroup, child) =>
             widget.builder(context, _formModel, widget.child),
         child: widget.child,
@@ -182,11 +191,15 @@ class FooDtoForm implements FormModel<FooDto> {
 
   static const String excerptControlName = "excerpt";
 
+  static const String colorControlName = "color";
+
   static const String featuredImageControlName = "featuredImage";
 
   static const String createdAtControlName = "createdAt";
 
   static const String updatedAtControlName = "updatedAt";
+
+  static const String colorPickControlName = "colorPick";
 
   static const String featuredImageUploadControlName = "featuredImageUpload";
 
@@ -202,11 +215,15 @@ class FooDtoForm implements FormModel<FooDto> {
 
   String excerptControlPath() => pathBuilder(excerptControlName);
 
+  String colorControlPath() => pathBuilder(colorControlName);
+
   String featuredImageControlPath() => pathBuilder(featuredImageControlName);
 
   String createdAtControlPath() => pathBuilder(createdAtControlName);
 
   String updatedAtControlPath() => pathBuilder(updatedAtControlName);
+
+  String colorPickControlPath() => pathBuilder(colorPickControlName);
 
   String featuredImageUploadControlPath() =>
       pathBuilder(featuredImageUploadControlName);
@@ -217,14 +234,18 @@ class FooDtoForm implements FormModel<FooDto> {
 
   String get _excerptValue => excerptControl.value as String;
 
+  int get _colorValue => colorControl.value as int;
+
   String get _featuredImageValue => featuredImageControl.value as String;
 
   DateTime? get _createdAtValue => createdAtControl?.value;
 
   DateTime? get _updatedAtValue => updatedAtControl?.value;
 
-  List<SelectedFile>? get _featuredImageUploadValue =>
-      featuredImageUploadControl?.value;
+  Color get _colorPickValue => colorPickControl.value as Color;
+
+  List<SelectedFile> get _featuredImageUploadValue =>
+      featuredImageUploadControl.value as List<SelectedFile>;
 
   bool get containsId {
     try {
@@ -247,6 +268,15 @@ class FooDtoForm implements FormModel<FooDto> {
   bool get containsExcerpt {
     try {
       form.control(excerptControlPath());
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  bool get containsColor {
+    try {
+      form.control(colorControlPath());
       return true;
     } catch (e) {
       return false;
@@ -280,6 +310,15 @@ class FooDtoForm implements FormModel<FooDto> {
     }
   }
 
+  bool get containsColorPick {
+    try {
+      form.control(colorPickControlPath());
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   bool get containsFeaturedImageUpload {
     try {
       form.control(featuredImageUploadControlPath());
@@ -289,19 +328,24 @@ class FooDtoForm implements FormModel<FooDto> {
     }
   }
 
-  Object? get idErrors => idControl.errors;
+  Map<String, Object> get idErrors => idControl.errors;
 
-  Object? get titleErrors => titleControl.errors;
+  Map<String, Object> get titleErrors => titleControl.errors;
 
-  Object? get excerptErrors => excerptControl.errors;
+  Map<String, Object> get excerptErrors => excerptControl.errors;
 
-  Object? get featuredImageErrors => featuredImageControl.errors;
+  Map<String, Object> get colorErrors => colorControl.errors;
 
-  Object? get createdAtErrors => createdAtControl?.errors;
+  Map<String, Object> get featuredImageErrors => featuredImageControl.errors;
 
-  Object? get updatedAtErrors => updatedAtControl?.errors;
+  Map<String, Object>? get createdAtErrors => createdAtControl?.errors;
 
-  Object? get featuredImageUploadErrors => featuredImageUploadControl?.errors;
+  Map<String, Object>? get updatedAtErrors => updatedAtControl?.errors;
+
+  Map<String, Object> get colorPickErrors => colorPickControl.errors;
+
+  Map<String, Object> get featuredImageUploadErrors =>
+      featuredImageUploadControl.errors;
 
   void get idFocus => form.focus(idControlPath());
 
@@ -309,11 +353,15 @@ class FooDtoForm implements FormModel<FooDto> {
 
   void get excerptFocus => form.focus(excerptControlPath());
 
+  void get colorFocus => form.focus(colorControlPath());
+
   void get featuredImageFocus => form.focus(featuredImageControlPath());
 
   void get createdAtFocus => form.focus(createdAtControlPath());
 
   void get updatedAtFocus => form.focus(updatedAtControlPath());
+
+  void get colorPickFocus => form.focus(colorPickControlPath());
 
   void get featuredImageUploadFocus =>
       form.focus(featuredImageUploadControlPath());
@@ -370,32 +418,6 @@ class FooDtoForm implements FormModel<FooDto> {
     }
   }
 
-  void featuredImageUploadRemove({
-    bool updateParent = true,
-    bool emitEvent = true,
-  }) {
-    if (containsFeaturedImageUpload) {
-      final controlPath = path;
-      if (controlPath == null) {
-        form.removeControl(
-          featuredImageUploadControlName,
-          updateParent: updateParent,
-          emitEvent: emitEvent,
-        );
-      } else {
-        final formGroup = form.control(controlPath);
-
-        if (formGroup is FormGroup) {
-          formGroup.removeControl(
-            featuredImageUploadControlName,
-            updateParent: updateParent,
-            emitEvent: emitEvent,
-          );
-        }
-      }
-    }
-  }
-
   void idValueUpdate(
     int value, {
     bool updateParent = true,
@@ -420,6 +442,15 @@ class FooDtoForm implements FormModel<FooDto> {
     bool emitEvent = true,
   }) {
     excerptControl.updateValue(value,
+        updateParent: updateParent, emitEvent: emitEvent);
+  }
+
+  void colorValueUpdate(
+    int value, {
+    bool updateParent = true,
+    bool emitEvent = true,
+  }) {
+    colorControl.updateValue(value,
         updateParent: updateParent, emitEvent: emitEvent);
   }
 
@@ -450,12 +481,21 @@ class FooDtoForm implements FormModel<FooDto> {
         updateParent: updateParent, emitEvent: emitEvent);
   }
 
-  void featuredImageUploadValueUpdate(
-    List<SelectedFile>? value, {
+  void colorPickValueUpdate(
+    Color value, {
     bool updateParent = true,
     bool emitEvent = true,
   }) {
-    featuredImageUploadControl?.updateValue(value,
+    colorPickControl.updateValue(value,
+        updateParent: updateParent, emitEvent: emitEvent);
+  }
+
+  void featuredImageUploadValueUpdate(
+    List<SelectedFile> value, {
+    bool updateParent = true,
+    bool emitEvent = true,
+  }) {
+    featuredImageUploadControl.updateValue(value,
         updateParent: updateParent, emitEvent: emitEvent);
   }
 
@@ -486,6 +526,15 @@ class FooDtoForm implements FormModel<FooDto> {
         updateParent: updateParent, emitEvent: emitEvent);
   }
 
+  void colorValuePatch(
+    int value, {
+    bool updateParent = true,
+    bool emitEvent = true,
+  }) {
+    colorControl.patchValue(value,
+        updateParent: updateParent, emitEvent: emitEvent);
+  }
+
   void featuredImageValuePatch(
     String value, {
     bool updateParent = true,
@@ -513,12 +562,21 @@ class FooDtoForm implements FormModel<FooDto> {
         updateParent: updateParent, emitEvent: emitEvent);
   }
 
-  void featuredImageUploadValuePatch(
-    List<SelectedFile>? value, {
+  void colorPickValuePatch(
+    Color value, {
     bool updateParent = true,
     bool emitEvent = true,
   }) {
-    featuredImageUploadControl?.patchValue(value,
+    colorPickControl.patchValue(value,
+        updateParent: updateParent, emitEvent: emitEvent);
+  }
+
+  void featuredImageUploadValuePatch(
+    List<SelectedFile> value, {
+    bool updateParent = true,
+    bool emitEvent = true,
+  }) {
+    featuredImageUploadControl.patchValue(value,
         updateParent: updateParent, emitEvent: emitEvent);
   }
 
@@ -552,6 +610,16 @@ class FooDtoForm implements FormModel<FooDto> {
       excerptControl.reset(
           value: value, updateParent: updateParent, emitEvent: emitEvent);
 
+  void colorValueReset(
+    int value, {
+    bool updateParent = true,
+    bool emitEvent = true,
+    bool removeFocus = false,
+    bool? disabled,
+  }) =>
+      colorControl.reset(
+          value: value, updateParent: updateParent, emitEvent: emitEvent);
+
   void featuredImageValueReset(
     String value, {
     bool updateParent = true,
@@ -582,14 +650,24 @@ class FooDtoForm implements FormModel<FooDto> {
       updatedAtControl?.reset(
           value: value, updateParent: updateParent, emitEvent: emitEvent);
 
-  void featuredImageUploadValueReset(
-    List<SelectedFile>? value, {
+  void colorPickValueReset(
+    Color value, {
     bool updateParent = true,
     bool emitEvent = true,
     bool removeFocus = false,
     bool? disabled,
   }) =>
-      featuredImageUploadControl?.reset(
+      colorPickControl.reset(
+          value: value, updateParent: updateParent, emitEvent: emitEvent);
+
+  void featuredImageUploadValueReset(
+    List<SelectedFile> value, {
+    bool updateParent = true,
+    bool emitEvent = true,
+    bool removeFocus = false,
+    bool? disabled,
+  }) =>
+      featuredImageUploadControl.reset(
           value: value, updateParent: updateParent, emitEvent: emitEvent);
 
   FormControl<int> get idControl =>
@@ -600,6 +678,9 @@ class FooDtoForm implements FormModel<FooDto> {
 
   FormControl<String> get excerptControl =>
       form.control(excerptControlPath()) as FormControl<String>;
+
+  FormControl<int> get colorControl =>
+      form.control(colorControlPath()) as FormControl<int>;
 
   FormControl<String> get featuredImageControl =>
       form.control(featuredImageControlPath()) as FormControl<String>;
@@ -612,11 +693,12 @@ class FooDtoForm implements FormModel<FooDto> {
       ? form.control(updatedAtControlPath()) as FormControl<DateTime>?
       : null;
 
-  FormControl<List<SelectedFile>>? get featuredImageUploadControl =>
-      containsFeaturedImageUpload
-          ? form.control(featuredImageUploadControlPath())
-              as FormControl<List<SelectedFile>>?
-          : null;
+  FormControl<Color> get colorPickControl =>
+      form.control(colorPickControlPath()) as FormControl<Color>;
+
+  FormControl<List<SelectedFile>> get featuredImageUploadControl =>
+      form.control(featuredImageUploadControlPath())
+          as FormControl<List<SelectedFile>>;
 
   void idSetDisabled(
     bool disabled, {
@@ -666,6 +748,24 @@ class FooDtoForm implements FormModel<FooDto> {
       );
     } else {
       excerptControl.markAsEnabled(
+        updateParent: updateParent,
+        emitEvent: emitEvent,
+      );
+    }
+  }
+
+  void colorSetDisabled(
+    bool disabled, {
+    bool updateParent = true,
+    bool emitEvent = true,
+  }) {
+    if (disabled) {
+      colorControl.markAsDisabled(
+        updateParent: updateParent,
+        emitEvent: emitEvent,
+      );
+    } else {
+      colorControl.markAsEnabled(
         updateParent: updateParent,
         emitEvent: emitEvent,
       );
@@ -726,18 +826,36 @@ class FooDtoForm implements FormModel<FooDto> {
     }
   }
 
+  void colorPickSetDisabled(
+    bool disabled, {
+    bool updateParent = true,
+    bool emitEvent = true,
+  }) {
+    if (disabled) {
+      colorPickControl.markAsDisabled(
+        updateParent: updateParent,
+        emitEvent: emitEvent,
+      );
+    } else {
+      colorPickControl.markAsEnabled(
+        updateParent: updateParent,
+        emitEvent: emitEvent,
+      );
+    }
+  }
+
   void featuredImageUploadSetDisabled(
     bool disabled, {
     bool updateParent = true,
     bool emitEvent = true,
   }) {
     if (disabled) {
-      featuredImageUploadControl?.markAsDisabled(
+      featuredImageUploadControl.markAsDisabled(
         updateParent: updateParent,
         emitEvent: emitEvent,
       );
     } else {
-      featuredImageUploadControl?.markAsEnabled(
+      featuredImageUploadControl.markAsEnabled(
         updateParent: updateParent,
         emitEvent: emitEvent,
       );
@@ -757,9 +875,11 @@ class FooDtoForm implements FormModel<FooDto> {
         id: _idValue,
         title: _titleValue,
         excerpt: _excerptValue,
+        color: _colorValue,
         featuredImage: _featuredImageValue,
         createdAt: _createdAtValue,
         updatedAt: _updatedAtValue,
+        colorPick: _colorPickValue,
         featuredImageUpload: _featuredImageUploadValue);
   }
 
@@ -857,6 +977,13 @@ class FooDtoForm implements FormModel<FooDto> {
             asyncValidatorsDebounceTime: 250,
             disabled: false,
             touched: false),
+        colorControlName: FormControl<int>(
+            value: fooDto?.color,
+            validators: [],
+            asyncValidators: [],
+            asyncValidatorsDebounceTime: 250,
+            disabled: false,
+            touched: false),
         featuredImageControlName: FormControl<String>(
             value: fooDto?.featuredImage,
             validators: [],
@@ -878,6 +1005,13 @@ class FooDtoForm implements FormModel<FooDto> {
             asyncValidatorsDebounceTime: 250,
             disabled: false,
             touched: false),
+        colorPickControlName: FormControl<Color>(
+            value: fooDto?.colorPick,
+            validators: [],
+            asyncValidators: [],
+            asyncValidatorsDebounceTime: 250,
+            disabled: false,
+            touched: false),
         featuredImageUploadControlName: FormControl<List<SelectedFile>>(
             value: fooDto?.featuredImageUpload,
             validators: [],
@@ -892,7 +1026,8 @@ class FooDtoForm implements FormModel<FooDto> {
           disabled: false);
 }
 
-class ReactiveFooDtoFormArrayBuilder<T> extends StatelessWidget {
+class ReactiveFooDtoFormArrayBuilder<ReactiveFooDtoFormArrayBuilderT>
+    extends StatelessWidget {
   const ReactiveFooDtoFormArrayBuilder({
     Key? key,
     this.control,
@@ -903,16 +1038,17 @@ class ReactiveFooDtoFormArrayBuilder<T> extends StatelessWidget {
             "You have to specify `control` or `formControl`!"),
         super(key: key);
 
-  final FormArray<T>? formControl;
+  final FormArray<ReactiveFooDtoFormArrayBuilderT>? formControl;
 
-  final FormArray<T>? Function(FooDtoForm formModel)? control;
+  final FormArray<ReactiveFooDtoFormArrayBuilderT>? Function(
+      FooDtoForm formModel)? control;
 
   final Widget Function(
           BuildContext context, List<Widget> itemList, FooDtoForm formModel)?
       builder;
 
-  final Widget Function(
-      BuildContext context, int i, T? item, FooDtoForm formModel) itemBuilder;
+  final Widget Function(BuildContext context, int i,
+      ReactiveFooDtoFormArrayBuilderT? item, FooDtoForm formModel) itemBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -922,7 +1058,7 @@ class ReactiveFooDtoFormArrayBuilder<T> extends StatelessWidget {
       throw FormControlParentNotFoundException(this);
     }
 
-    return ReactiveFormArray<T>(
+    return ReactiveFormArray<ReactiveFooDtoFormArrayBuilderT>(
       formArray: formControl ?? control?.call(formModel),
       builder: (context, formArray, child) {
         final values = formArray.controls.map((e) => e.value).toList();
@@ -953,7 +1089,8 @@ class ReactiveFooDtoFormArrayBuilder<T> extends StatelessWidget {
   }
 }
 
-class ReactiveFooDtoFormFormGroupArrayBuilder<T> extends StatelessWidget {
+class ReactiveFooDtoFormFormGroupArrayBuilder<
+    ReactiveFooDtoFormFormGroupArrayBuilderT> extends StatelessWidget {
   const ReactiveFooDtoFormFormGroupArrayBuilder({
     Key? key,
     this.extended,
@@ -964,17 +1101,22 @@ class ReactiveFooDtoFormFormGroupArrayBuilder<T> extends StatelessWidget {
             "You have to specify `control` or `formControl`!"),
         super(key: key);
 
-  final ExtendedControl<List<Map<String, Object?>?>, List<T>>? extended;
+  final ExtendedControl<List<Map<String, Object?>?>,
+      List<ReactiveFooDtoFormFormGroupArrayBuilderT>>? extended;
 
-  final ExtendedControl<List<Map<String, Object?>?>, List<T>> Function(
-      FooDtoForm formModel)? getExtended;
+  final ExtendedControl<List<Map<String, Object?>?>,
+          List<ReactiveFooDtoFormFormGroupArrayBuilderT>>
+      Function(FooDtoForm formModel)? getExtended;
 
   final Widget Function(
           BuildContext context, List<Widget> itemList, FooDtoForm formModel)?
       builder;
 
   final Widget Function(
-      BuildContext context, int i, T? item, FooDtoForm formModel) itemBuilder;
+      BuildContext context,
+      int i,
+      ReactiveFooDtoFormFormGroupArrayBuilderT? item,
+      FooDtoForm formModel) itemBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -989,19 +1131,20 @@ class ReactiveFooDtoFormFormGroupArrayBuilder<T> extends StatelessWidget {
     return StreamBuilder<List<Map<String, Object?>?>?>(
       stream: value.control.valueChanges,
       builder: (context, snapshot) {
-        final itemList = (value.value() ?? <T>[])
-            .asMap()
-            .map((i, item) => MapEntry(
-                  i,
-                  itemBuilder(
-                    context,
-                    i,
-                    item,
-                    formModel,
-                  ),
-                ))
-            .values
-            .toList();
+        final itemList =
+            (value.value() ?? <ReactiveFooDtoFormFormGroupArrayBuilderT>[])
+                .asMap()
+                .map((i, item) => MapEntry(
+                      i,
+                      itemBuilder(
+                        context,
+                        i,
+                        item,
+                        formModel,
+                      ),
+                    ))
+                .values
+                .toList();
 
         return builder?.call(
               context,

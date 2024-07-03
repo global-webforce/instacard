@@ -1,5 +1,13 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
+import 'package:reactive_forms_annotations/reactive_forms_annotations.dart';
+import 'package:reactive_image_picker/reactive_image_picker.dart';
 
 int fastHash(String string) {
   var hash = 0xcbf29ce484222325;
@@ -22,4 +30,46 @@ class TimestampSerializer implements JsonConverter<DateTime, dynamic> {
 
   @override
   Timestamp toJson(DateTime date) => Timestamp.fromDate(date);
+}
+
+class ColorValueAccessor extends ControlValueAccessor<double, Color> {
+  @override
+  Color modelToViewValue(double? modelValue) {
+    if (modelValue == null) return Colors.transparent;
+    return Color(modelValue.toInt());
+  }
+
+  @override
+  double viewToModelValue(Color? viewValue) {
+    if (viewValue == null) return 0.0;
+    return viewValue.value.toDouble();
+  }
+}
+
+class ColorSerializer implements JsonConverter<Color, int> {
+  const ColorSerializer();
+  static const Color defaultColor = Color.fromRGBO(0, 0, 0, 0);
+
+  @override
+  Color fromJson(int? json) => json == null ? defaultColor : Color(json);
+
+  @override
+  int toJson(Color? o) => o?.value ?? defaultColor.value;
+}
+
+/// Returns the image path after successful save.
+/// Eg: Image( image: FileImage(File(image_path)),
+Future<String> saveImageToLocal(XFile? featuredImageUpload) async {
+  if (featuredImageUpload != null) {
+    final fileName = path.basename(featuredImageUpload.name);
+    final dir = await getApplicationDocumentsDirectory();
+
+    try {
+      await featuredImageUpload.saveTo(path.join(dir.path, fileName));
+      return path.join(dir.path, fileName);
+    } catch (e) {
+      return "";
+    }
+  }
+  return "";
 }

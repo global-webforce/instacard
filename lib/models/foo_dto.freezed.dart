@@ -27,15 +27,21 @@ mixin _$FooDto {
   @RfControl()
   String get excerpt => throw _privateConstructorUsedError;
   @RfControl()
+  int get color => throw _privateConstructorUsedError;
+  @RfControl()
   String get featuredImage => throw _privateConstructorUsedError;
   @RfControl()
   DateTime? get createdAt => throw _privateConstructorUsedError;
   @RfControl()
   DateTime? get updatedAt => throw _privateConstructorUsedError;
+  @ignore
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @RfControl()
+  Color get colorPick => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
   @ignore
   @RfControl()
-  List<SelectedFile>? get featuredImageUpload =>
+  List<SelectedFile> get featuredImageUpload =>
       throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -52,13 +58,18 @@ abstract class $FooDtoCopyWith<$Res> {
       {@RfControl() int id,
       @RfControl() String title,
       @RfControl() String excerpt,
+      @RfControl() int color,
       @RfControl() String featuredImage,
       @RfControl() DateTime? createdAt,
       @RfControl() DateTime? updatedAt,
+      @ignore
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      @RfControl()
+      Color colorPick,
       @JsonKey(includeFromJson: false, includeToJson: false)
       @ignore
       @RfControl()
-      List<SelectedFile>? featuredImageUpload});
+      List<SelectedFile> featuredImageUpload});
 }
 
 /// @nodoc
@@ -77,10 +88,12 @@ class _$FooDtoCopyWithImpl<$Res, $Val extends FooDto>
     Object? id = null,
     Object? title = null,
     Object? excerpt = null,
+    Object? color = null,
     Object? featuredImage = null,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
-    Object? featuredImageUpload = freezed,
+    Object? colorPick = null,
+    Object? featuredImageUpload = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -95,6 +108,10 @@ class _$FooDtoCopyWithImpl<$Res, $Val extends FooDto>
           ? _value.excerpt
           : excerpt // ignore: cast_nullable_to_non_nullable
               as String,
+      color: null == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
+              as int,
       featuredImage: null == featuredImage
           ? _value.featuredImage
           : featuredImage // ignore: cast_nullable_to_non_nullable
@@ -107,10 +124,14 @@ class _$FooDtoCopyWithImpl<$Res, $Val extends FooDto>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      featuredImageUpload: freezed == featuredImageUpload
+      colorPick: null == colorPick
+          ? _value.colorPick
+          : colorPick // ignore: cast_nullable_to_non_nullable
+              as Color,
+      featuredImageUpload: null == featuredImageUpload
           ? _value.featuredImageUpload
           : featuredImageUpload // ignore: cast_nullable_to_non_nullable
-              as List<SelectedFile>?,
+              as List<SelectedFile>,
     ) as $Val);
   }
 }
@@ -126,13 +147,18 @@ abstract class _$$FooDtoImplCopyWith<$Res> implements $FooDtoCopyWith<$Res> {
       {@RfControl() int id,
       @RfControl() String title,
       @RfControl() String excerpt,
+      @RfControl() int color,
       @RfControl() String featuredImage,
       @RfControl() DateTime? createdAt,
       @RfControl() DateTime? updatedAt,
+      @ignore
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      @RfControl()
+      Color colorPick,
       @JsonKey(includeFromJson: false, includeToJson: false)
       @ignore
       @RfControl()
-      List<SelectedFile>? featuredImageUpload});
+      List<SelectedFile> featuredImageUpload});
 }
 
 /// @nodoc
@@ -149,10 +175,12 @@ class __$$FooDtoImplCopyWithImpl<$Res>
     Object? id = null,
     Object? title = null,
     Object? excerpt = null,
+    Object? color = null,
     Object? featuredImage = null,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
-    Object? featuredImageUpload = freezed,
+    Object? colorPick = null,
+    Object? featuredImageUpload = null,
   }) {
     return _then(_$FooDtoImpl(
       id: null == id
@@ -167,6 +195,10 @@ class __$$FooDtoImplCopyWithImpl<$Res>
           ? _value.excerpt
           : excerpt // ignore: cast_nullable_to_non_nullable
               as String,
+      color: null == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
+              as int,
       featuredImage: null == featuredImage
           ? _value.featuredImage
           : featuredImage // ignore: cast_nullable_to_non_nullable
@@ -179,10 +211,14 @@ class __$$FooDtoImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      featuredImageUpload: freezed == featuredImageUpload
+      colorPick: null == colorPick
+          ? _value.colorPick
+          : colorPick // ignore: cast_nullable_to_non_nullable
+              as Color,
+      featuredImageUpload: null == featuredImageUpload
           ? _value._featuredImageUpload
           : featuredImageUpload // ignore: cast_nullable_to_non_nullable
-              as List<SelectedFile>?,
+              as List<SelectedFile>,
     ));
   }
 }
@@ -194,13 +230,18 @@ class _$FooDtoImpl extends _FooDto {
       {@RfControl() this.id = Isar.autoIncrement,
       @RfControl() this.title = '',
       @RfControl() this.excerpt = '',
+      @RfControl() this.color = 0xffef5350,
       @RfControl() this.featuredImage = '',
       @RfControl() this.createdAt,
       @RfControl() this.updatedAt,
+      @ignore
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      @RfControl()
+      this.colorPick = Colors.red,
       @JsonKey(includeFromJson: false, includeToJson: false)
       @ignore
       @RfControl()
-      final List<SelectedFile>? featuredImageUpload})
+      final List<SelectedFile> featuredImageUpload = const []})
       : _featuredImageUpload = featuredImageUpload,
         super._();
 
@@ -222,6 +263,10 @@ class _$FooDtoImpl extends _FooDto {
   @override
   @JsonKey()
   @RfControl()
+  final int color;
+  @override
+  @JsonKey()
+  @RfControl()
   final String featuredImage;
   @override
   @RfControl()
@@ -229,23 +274,26 @@ class _$FooDtoImpl extends _FooDto {
   @override
   @RfControl()
   final DateTime? updatedAt;
-  final List<SelectedFile>? _featuredImageUpload;
+  @override
+  @ignore
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @RfControl()
+  final Color colorPick;
+  final List<SelectedFile> _featuredImageUpload;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @ignore
   @RfControl()
-  List<SelectedFile>? get featuredImageUpload {
-    final value = _featuredImageUpload;
-    if (value == null) return null;
+  List<SelectedFile> get featuredImageUpload {
     if (_featuredImageUpload is EqualUnmodifiableListView)
       return _featuredImageUpload;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_featuredImageUpload);
   }
 
   @override
   String toString() {
-    return 'FooDto(id: $id, title: $title, excerpt: $excerpt, featuredImage: $featuredImage, createdAt: $createdAt, updatedAt: $updatedAt, featuredImageUpload: $featuredImageUpload)';
+    return 'FooDto(id: $id, title: $title, excerpt: $excerpt, color: $color, featuredImage: $featuredImage, createdAt: $createdAt, updatedAt: $updatedAt, colorPick: $colorPick, featuredImageUpload: $featuredImageUpload)';
   }
 
   @override
@@ -256,12 +304,15 @@ class _$FooDtoImpl extends _FooDto {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.excerpt, excerpt) || other.excerpt == excerpt) &&
+            (identical(other.color, color) || other.color == color) &&
             (identical(other.featuredImage, featuredImage) ||
                 other.featuredImage == featuredImage) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
+            (identical(other.colorPick, colorPick) ||
+                other.colorPick == colorPick) &&
             const DeepCollectionEquality()
                 .equals(other._featuredImageUpload, _featuredImageUpload));
   }
@@ -273,9 +324,11 @@ class _$FooDtoImpl extends _FooDto {
       id,
       title,
       excerpt,
+      color,
       featuredImage,
       createdAt,
       updatedAt,
+      colorPick,
       const DeepCollectionEquality().hash(_featuredImageUpload));
 
   @JsonKey(ignore: true)
@@ -297,13 +350,18 @@ abstract class _FooDto extends FooDto {
       {@RfControl() final int id,
       @RfControl() final String title,
       @RfControl() final String excerpt,
+      @RfControl() final int color,
       @RfControl() final String featuredImage,
       @RfControl() final DateTime? createdAt,
       @RfControl() final DateTime? updatedAt,
+      @ignore
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      @RfControl()
+      final Color colorPick,
       @JsonKey(includeFromJson: false, includeToJson: false)
       @ignore
       @RfControl()
-      final List<SelectedFile>? featuredImageUpload}) = _$FooDtoImpl;
+      final List<SelectedFile> featuredImageUpload}) = _$FooDtoImpl;
   _FooDto._() : super._();
 
   factory _FooDto.fromJson(Map<String, dynamic> json) = _$FooDtoImpl.fromJson;
@@ -319,6 +377,9 @@ abstract class _FooDto extends FooDto {
   String get excerpt;
   @override
   @RfControl()
+  int get color;
+  @override
+  @RfControl()
   String get featuredImage;
   @override
   @RfControl()
@@ -327,10 +388,15 @@ abstract class _FooDto extends FooDto {
   @RfControl()
   DateTime? get updatedAt;
   @override
+  @ignore
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @RfControl()
+  Color get colorPick;
+  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @ignore
   @RfControl()
-  List<SelectedFile>? get featuredImageUpload;
+  List<SelectedFile> get featuredImageUpload;
   @override
   @JsonKey(ignore: true)
   _$$FooDtoImplCopyWith<_$FooDtoImpl> get copyWith =>

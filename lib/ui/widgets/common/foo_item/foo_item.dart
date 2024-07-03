@@ -30,7 +30,7 @@ class FooItem extends StackedView<FooItemModel> {
                 clipBehavior: Clip.none,
                 children: [
                   Builder(builder: (context) {
-                    final x = getRandomColor();
+                    final x = Color(foo.color);
                     return Card(
                       color: x,
                       margin: const EdgeInsets.all(0),
@@ -42,8 +42,7 @@ class FooItem extends StackedView<FooItemModel> {
                             height: 120,
                             width: double.infinity,
                             fit: BoxFit.cover,
-                            image:
-                                FileImage(File(foo.featuredImage.toString())),
+                            image: FileImage(File(foo.featuredImage)),
                             errorBuilder: (context, url, error) => Expanded(
                               child: Container(
                                 width: double.infinity,
