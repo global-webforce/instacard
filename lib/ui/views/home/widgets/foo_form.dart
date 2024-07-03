@@ -4,18 +4,20 @@ import 'package:instacard/app/app.locator.dart';
 import 'package:instacard/models/foo_dto.dart';
 import 'package:instacard/services/foo_service.dart';
 import 'package:instacard/ui/common/ui_helpers.dart';
+import 'package:instacard/ui/views/home/home_viewmodel.dart';
 import 'package:reactive_color_picker/reactive_color_picker.dart';
 import 'package:reactive_forms_annotations/reactive_forms_annotations.dart';
 import 'package:reactive_image_picker/reactive_image_picker.dart';
+import 'package:stacked/stacked.dart';
 
 class FooForm extends StatelessWidget {
-  final FooDto model;
-  const FooForm({super.key, required this.model});
+  const FooForm({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = getParentViewModel<HomeViewModel>(context);
     return FooDtoFormBuilder(
-        model: model,
+        model: viewModel.selectedItem,
         builder: (context, formModel, child) {
           return Card(
               margin: const EdgeInsets.all(0),
@@ -23,11 +25,27 @@ class FooForm extends StatelessWidget {
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
                     children: [
-                      ReactiveFooDtoFormConsumer(
-                          builder: (context, formModel, child) {
-                        return Text(formModel.form.pristine.toString());
-                      }),
-                      ReactiveMaterialColorPicker<Color>(
+                      ReactiveTextField<int>(
+                        formControl: formModel.idControl,
+                        decoration: const InputDecoration(
+                          labelText: 'ID',
+                        ),
+                        validationMessages: {
+                          ValidationMessage.required: (_) =>
+                              'Title must not be empty',
+                        },
+                      ),
+                      ReactiveTextField<DateTime>(
+                        formControl: formModel.createdAtControl,
+                        decoration: const InputDecoration(
+                          labelText: 'Created At',
+                        ),
+                        validationMessages: {
+                          ValidationMessage.required: (_) =>
+                              'Title must not be empty',
+                        },
+                      ),
+                      ReactiveMaterialColorPicker(
                         formControl: formModel.colorPickControl,
                       ),
                       ReactiveTextField<String>(
@@ -58,26 +76,48 @@ class FooForm extends StatelessWidget {
                       vSpaceSmall,
                       ReactiveFooDtoFormConsumer(
                         builder: (context, formModel, child) {
-                          return ElevatedButton(
-                            onPressed: formModel.form.valid
-                                ? () async {
-                                    print(formModel.form.value);
-                                    await locator<FooService>()
-                                        .create(formModel.model);
-                                    formModel.form.reset();
-                                    formModel.updateValue(FooDto());
-                                    formModel.form.unfocus();
-                                  }
-                                : null,
-                            child: const Text('CONTINUE'),
+                          return Column(
+                            children: [
+                              Text(formModel.form.pristine.toString()),
+                              if (viewModel.selectedItem?.createdAt == null)
+                                ElevatedButton(
+                                  onPressed: formModel.form.valid
+                                      ? () async {
+                                          await locator<FooService>()
+                                              .create(formModel.model);
+
+                                          formModel.form
+                                              .reset(removeFocus: true);
+                                          formModel.updateValue(FooDto());
+                                          viewModel.selectedItem = FooDto();
+                                        }
+                                      : null,
+                                  child: const Text('CREATE'),
+                                ),
+                              if (viewModel.selectedItem?.createdAt != null)
+                                ElevatedButton(
+                                  onPressed: formModel.form.valid
+                                      ? () async {
+                                          await locator<FooService>()
+                                              .create(formModel.model);
+
+                                          formModel.form
+                                              .reset(removeFocus: true);
+                                          formModel.updateValue(
+                                              viewModel.selectedItem);
+                                        }
+                                      : null,
+                                  child: const Text('UPDATE'),
+                                ),
+                            ],
                           );
                         },
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          formModel.form.reset();
+                          formModel.form.reset(removeFocus: true);
                           formModel.updateValue(FooDto());
-                          formModel.form.unfocus();
+                          viewModel.selectedItem = FooDto();
                         },
                         child: const Text('RESET'),
                       ),

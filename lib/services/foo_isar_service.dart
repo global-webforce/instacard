@@ -44,6 +44,8 @@ class FooIsarService extends FooService implements InitializableDependency {
           createdAt: Timestamp.now().toDate(),
           color: item.colorPick.value));
     });
+    selectedItem = item;
+    print(selectedItem);
     await fetchAll();
   }
 

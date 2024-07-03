@@ -1,5 +1,6 @@
 import 'package:instacard/app/app.locator.dart';
 import 'package:instacard/models/foo_dto.dart';
+import 'package:instacard/services/foo_service.dart';
 import 'package:instacard/ui/common/screen_scaffold.dart';
 import 'package:instacard/ui/views/home/widgets/foo_form.dart';
 import 'package:instacard/ui/views/home/widgets/foo_gridview.dart';
@@ -35,12 +36,9 @@ class HomeView extends StackedView<HomeViewModel> {
         title: "Instacard",
         actions: const [],
         body: CustomScrollView(slivers: [
-          SliverPadding(
-              padding: const EdgeInsets.all(12),
-              sliver: SliverToBoxAdapter(
-                  child: FooForm(
-                model: viewModel.selectedItem,
-              ))),
+          const SliverPadding(
+              padding: EdgeInsets.all(12),
+              sliver: SliverToBoxAdapter(child: FooForm())),
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
             sliver: FooGridView(
@@ -59,7 +57,7 @@ class HomeView extends StackedView<HomeViewModel> {
               },
               itemBuilder: (context, i) {
                 return FooItem(onTap: () {
-                  viewModel.selectedItem = viewModel.foos[i];
+                  viewModel.selectedItem = viewModel.foos[i].toForm();
                 }, viewModel.foos[i], const Size(double.infinity, 238.0));
               },
             ),

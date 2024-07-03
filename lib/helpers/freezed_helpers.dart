@@ -32,17 +32,18 @@ class TimestampSerializer implements JsonConverter<DateTime, dynamic> {
   Timestamp toJson(DateTime date) => Timestamp.fromDate(date);
 }
 
-class ColorValueAccessor extends ControlValueAccessor<double, Color> {
+class ColorValueAccessor extends ControlValueAccessor<Color, double> {
   @override
-  Color modelToViewValue(double? modelValue) {
-    if (modelValue == null) return Colors.transparent;
-    return Color(modelValue.toInt());
+  double modelToViewValue(Color? modelValue) {
+    if (modelValue == null) return 0.0;
+    return 0.0;
   }
 
   @override
-  double viewToModelValue(Color? viewValue) {
-    if (viewValue == null) return 0.0;
-    return viewValue.value.toDouble();
+  Color viewToModelValue(double? viewValue) {
+    if (viewValue == null) return Colors.transparent;
+
+    return Colors.purple;
   }
 }
 
