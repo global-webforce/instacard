@@ -113,7 +113,7 @@ class FooDto with _$FooDto {
   }
 
   FooDto toForm() {
-    return copyWith(featuredImageUpload: [
+    return copyWith(colorPick: Color(color), featuredImageUpload: [
       if (featuredImage.isNotEmpty)
         SelectedFile.image(
           url: featuredImage.toString(),

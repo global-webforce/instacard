@@ -21,7 +21,7 @@ class FooForm extends StatelessWidget {
     final viewModel = getParentViewModel<HomeViewModel>(context);
     return FooDtoFormBuilder(
         key: UniqueKey(),
-        model: viewModel.selectedItem ?? FooDto(),
+        model: viewModel.selectedItem?.toForm() ?? FooDto().toForm(),
         builder: (context, formModel, child) {
           return Card(
               margin: const EdgeInsets.all(0),
