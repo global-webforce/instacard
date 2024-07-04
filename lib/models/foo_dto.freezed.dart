@@ -237,7 +237,7 @@ class _$FooDtoImpl extends _FooDto {
       @ignore
       @JsonKey(includeFromJson: false, includeToJson: false)
       @RfControl()
-      this.colorPick = Colors.red,
+      this.colorPick = Colors.orange,
       @JsonKey(includeFromJson: false, includeToJson: false)
       @ignore
       @RfControl()

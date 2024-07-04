@@ -24,10 +24,11 @@ class HomeViewModel extends ReactiveViewModel {
 
   List<FooDto> get foos => _fooService.items;
 
-  FooDto? get selectedItem =>
-      _fooService.selectedItem?.toForm() ?? FooDto().toForm();
+  FooDto? get selectedItem => _fooService.selectedItem ?? FooDto();
 
-  set selectedItem(FooDto? item) => _fooService.selectedItem = item?.toForm();
+  set selectedItem(FooDto? item) {
+    _fooService.selectedItem = item;
+  }
 
   Future init() async {
     await runBusyFuture(

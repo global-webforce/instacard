@@ -115,10 +115,10 @@ class FooForm extends StatelessWidget {
                                           await locator<FooService>()
                                               .create(formModel.model);
 
-                                          formModel.form
-                                              .reset(removeFocus: true);
-                                          formModel.updateValue(
-                                              viewModel.selectedItem);
+                                          formModel.form.reset(
+                                              value: FooDto().toJson(),
+                                              updateParent: true,
+                                              removeFocus: true);
                                         }
                                       : null,
                                   child: const Text('UPDATE'),

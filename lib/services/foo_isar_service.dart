@@ -35,7 +35,7 @@ class FooIsarService extends FooService implements InitializableDependency {
 
     await isar.writeTxn(() async {
       await isar.fooDtos.put(item.copyWith(
-        color: item.colorPick?.value ?? Colors.red.value,
+        color: item.colorPick?.value ?? Colors.pink.value,
         createdAt: Timestamp.now().toDate(),
       ));
     });
