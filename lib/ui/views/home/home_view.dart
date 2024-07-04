@@ -55,7 +55,7 @@ class HomeView extends StackedView<HomeViewModel> {
               },
               itemBuilder: (context, i) {
                 return FooItem(onTap: () {
-                  viewModel.selectedItem = viewModel.foos[i];
+                  viewModel.selectedItem = viewModel.foos[i].view();
                 }, viewModel.foos[i], const Size(double.infinity, 238.0));
               },
             ),

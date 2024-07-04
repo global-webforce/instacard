@@ -24,7 +24,7 @@ class HomeViewModel extends ReactiveViewModel {
 
   List<FooDto> get foos => _fooService.items;
 
-  FooDto? get selectedItem => _fooService.selectedItem ?? FooDto();
+  FooDto? get selectedItem => _fooService.selectedItem;
 
   set selectedItem(FooDto? item) {
     _fooService.selectedItem = item;

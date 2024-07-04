@@ -21,7 +21,7 @@ class FooForm extends StatelessWidget {
     final viewModel = getParentViewModel<HomeViewModel>(context);
     return FooDtoFormBuilder(
         key: UniqueKey(),
-        model: viewModel.selectedItem?.toForm() ?? FooDto().toForm(),
+        model: viewModel.selectedItem,
         builder: (context, formModel, child) {
           return Card(
               margin: const EdgeInsets.all(0),
@@ -50,7 +50,9 @@ class FooForm extends StatelessWidget {
                         },
                       ),
                       ReactiveBlockColorPicker(
-                        pickerColor: Colors.orange,
+                        valueAccessor:
+                            ColorValueAccessor(defaultColor: Colors.grey),
+                        pickerColor: Colors.grey,
                         availableColors: const [
                           Colors.red,
                           Colors.orange,
@@ -130,7 +132,7 @@ class FooForm extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () {
                           formModel.form.reset(removeFocus: true);
-                          viewModel.selectedItem = FooDto().toForm();
+                          viewModel.selectedItem = FooDto().reset();
                         },
                         child: const Text('RESET'),
                       ),

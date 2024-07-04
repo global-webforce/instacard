@@ -32,7 +32,7 @@ class FooDto with _$FooDto {
       includeToJson: false,
     )
     @RfControl()
-    @Default(Colors.orange)
+    @Default(Colors.red)
     Color? colorPick,
     @JsonKey(
       includeFromJson: false,
@@ -112,13 +112,34 @@ class FooDto with _$FooDto {
     return FooDto();
   }
 
-  FooDto toForm() {
-    return copyWith(colorPick: Color(color), featuredImageUpload: [
-      if (featuredImage.isNotEmpty)
-        SelectedFile.image(
-          url: featuredImage.toString(),
-        )
-    ]);
+  FooDto view() {
+    return copyWith(
+      colorPick: Color(color),
+      featuredImageUpload: [
+        if (featuredImage.isNotEmpty)
+          SelectedFile.image(
+            url: featuredImage.toString(),
+          )
+      ],
+    );
+  }
+
+  FooDto reset() {
+    return FooDto(colorPick: Colors.orange, featuredImageUpload: []);
+  }
+
+  FooDto create() {
+    return copyWith(
+      color: colorPick?.value ?? Colors.red.value,
+      createdAt: Timestamp.now().toDate(),
+    );
+  }
+
+  FooDto update() {
+    return copyWith(
+      color: colorPick?.value ?? Colors.red.value,
+      updatedAt: Timestamp.now().toDate(),
+    );
   }
 
   factory FooDto.fromFirestore(

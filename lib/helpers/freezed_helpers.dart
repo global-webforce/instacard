@@ -30,21 +30,6 @@ class TimestampSerializer implements JsonConverter<DateTime, dynamic> {
   Timestamp toJson(DateTime date) => Timestamp.fromDate(date);
 }
 
-class ColorValueAccessor extends ControlValueAccessor<Color, double> {
-  @override
-  double modelToViewValue(Color? modelValue) {
-    if (modelValue == null) return 0.0;
-    return 0.0;
-  }
-
-  @override
-  Color viewToModelValue(double? viewValue) {
-    if (viewValue == null) return Colors.transparent;
-
-    return Colors.purple;
-  }
-}
-
 class ColorSerializer implements JsonConverter<Color, int> {
   const ColorSerializer();
   static const Color defaultColor = Color.fromRGBO(0, 0, 0, 0);
@@ -103,5 +88,23 @@ extension FicListExtension<T> on List<T> {
     for (var index = 0; index < length; index++) {
       yield map(index, this[index]);
     }
+  }
+}
+
+class ColorValueAccessor extends ControlValueAccessor<Color, double> {
+  final Color defaultColor;
+
+  ColorValueAccessor({required this.defaultColor});
+
+  @override
+  double modelToViewValue(Color? modelValue) {
+    // Convert the Color to a double (ARGB value)
+    return (modelValue ?? defaultColor).value.toDouble();
+  }
+
+  @override
+  Color viewToModelValue(double? viewValue) {
+    // Convert the double (ARGB value) back to a Color
+    return viewValue != null ? Color(viewValue.toInt()) : Colors.blue;
   }
 }
