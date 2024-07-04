@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:instacard/helpers/freezed_helpers.dart';
 import 'package:instacard/models/foo_dto.dart';
-import 'package:reactive_image_picker/reactive_image_picker.dart';
 
 import 'foo_service.dart';
 
@@ -39,18 +38,19 @@ class FooFirebaseService extends FooService {
 
   @override
   Future<void> create(FooDto item) async {
-    final image = item.featuredImageUpload?[0];
-    String filePath = "";
-    if (image != null) {
+    final image = item.featuredImageUpload[0];
+
+    String featuredImage = "";
+    for (var i = 0; i < item.featuredImageUpload.length; i++) {
       final fileName = DateTime.now().millisecondsSinceEpoch.toString();
       final dir = 'images/$fileName';
       final storageRef = storage.ref(dir);
       await storageRef.putData(await image.file!.readAsBytes());
-      filePath = await storageRef.getDownloadURL();
+      featuredImage = await storageRef.getDownloadURL();
     }
 
     await collectionRef.add(item.copyWith(
-      featuredImage: filePath,
+      featuredImage: featuredImage,
       createdAt: Timestamp.now().toDate(),
     ));
 

@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:instacard/app/app.locator.dart';
+import 'package:instacard/helpers/freezed_helpers.dart';
 import 'package:instacard/models/foo_dto.dart';
 import 'package:instacard/services/foo_service.dart';
 import 'package:instacard/ui/common/ui_helpers.dart';
@@ -47,17 +50,17 @@ class FooForm extends StatelessWidget {
                         },
                       ),
                       ReactiveBlockColorPicker(
-                          pickerColor: Colors.orange,
-                          availableColors: const [
-                            Colors.red,
-                            Colors.orange,
-                            Colors.blue,
-                            Colors.purple,
-                            Colors.brown,
-                            Colors.grey
-                          ],
-                          formControl: formModel.colorPickControl,
-                          key: const ValueKey('qweqweqe')),
+                        pickerColor: Colors.orange,
+                        availableColors: const [
+                          Colors.red,
+                          Colors.orange,
+                          Colors.blue,
+                          Colors.purple,
+                          Colors.brown,
+                          Colors.grey
+                        ],
+                        formControl: formModel.colorPickControl,
+                      ),
                       ReactiveTextField<String>(
                         formControl: formModel.titleControl,
                         decoration: const InputDecoration(
@@ -109,15 +112,11 @@ class FooForm extends StatelessWidget {
                                 ElevatedButton(
                                   onPressed: formModel.form.valid
                                       ? () async {
-                                          await locator<FooService>().create(
-                                              formModel.model.copyWith(
-                                                  colorPick: formModel
-                                                          .model.colorPick ??
-                                                      Colors.red));
+                                          await locator<FooService>()
+                                              .create(formModel.model);
 
                                           formModel.form
                                               .reset(removeFocus: true);
-
                                           formModel.updateValue(
                                               viewModel.selectedItem);
                                         }
@@ -236,11 +235,49 @@ class FeaturedImagePicker extends StatelessWidget {
         }
       },
       selectedValueBuilder: (image, handleDelete, handleChange) {
-        return Container(
-          height: 200,
-          width: 200,
-          color: Colors.amber,
-        );
+        return Column(
+            children: image.mapIndexed((index, image) {
+          {
+            return Center(
+                child: GestureDetector(
+              onTap: () => handleChange(context, image),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: AspectRatio(
+                  aspectRatio: 4 / 3, // 4:3 aspect ratio
+                  child: Image(
+                    height: 120,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    image: FileImage(File("${image.url ?? image.file?.path}")),
+                    errorBuilder: (context, url, error) => const Expanded(
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Icon(
+                          Icons.image_rounded,
+                        ),
+                      ),
+                    ),
+                    loadingBuilder:
+                        (_, Widget child, ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) {
+                        // Show the loaded image if loading is complete.
+                        return child;
+                      } else {
+                        // Show a loading indicator with progress information.
+                        return Container(
+                          color: Colors.grey[300],
+                          height: 120,
+                          width: double.infinity,
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ));
+          }
+        }).toList());
       },
       inputBuilder: (onPressed) => TextButton.icon(
         onPressed: onPressed,

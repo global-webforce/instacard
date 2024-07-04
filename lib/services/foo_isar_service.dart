@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:instacard/helpers/freezed_helpers.dart';
 import 'package:instacard/models/foo_dto.dart';
 import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'foo_service.dart';
-import 'package:path/path.dart' as path;
 
 @Singleton()
 class FooIsarService extends FooService implements InitializableDependency {
@@ -33,16 +31,13 @@ class FooIsarService extends FooService implements InitializableDependency {
   Future create(FooDto item) async {
     final isar = await _db;
 
-    String featuredImage = "";
-    for (var i = 0; i < item.featuredImageUpload.length; i++) {
-      featuredImage = await saveImageToLocal(item.featuredImageUpload[i].file);
-    }
+    item = await item.saveFeaturedImage();
 
     await isar.writeTxn(() async {
       await isar.fooDtos.put(item.copyWith(
-          featuredImage: featuredImage,
-          createdAt: Timestamp.now().toDate(),
-          color: item.colorPick?.value ?? Colors.red.value));
+        color: item.colorPick?.value ?? Colors.red.value,
+        createdAt: Timestamp.now().toDate(),
+      ));
     });
 
     selectedItem = item;

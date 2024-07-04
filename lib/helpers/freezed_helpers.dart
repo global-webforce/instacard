@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -62,12 +60,22 @@ class ColorSerializer implements JsonConverter<Color, int> {
 /// Eg: Image( image: FileImage(File(image_path)),
 Future<String> saveImageToLocal(XFile? featuredImageUpload) async {
   if (featuredImageUpload != null) {
-    final fileName = path.basename(featuredImageUpload.name);
     final dir = await getApplicationDocumentsDirectory();
+    String fileName = path.basename(featuredImageUpload.name);
+    String filePath = path.join(dir.path, fileName);
+
+    // Check for filename collision and append timestamp if necessary
+    if (await File(filePath).exists()) {
+      String extension = path.extension(fileName);
+      String baseName = path.basenameWithoutExtension(fileName);
+      String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+      fileName = '${baseName}_$timestamp$extension';
+      filePath = path.join(dir.path, fileName);
+    }
 
     try {
-      await featuredImageUpload.saveTo(path.join(dir.path, fileName));
-      return path.join(dir.path, fileName);
+      await featuredImageUpload.saveTo(filePath);
+      return filePath;
     } catch (e) {
       return "";
     }
@@ -85,5 +93,15 @@ Future<bool> deleteImageFromLocal(String filePath) async {
     return false;
   } catch (e) {
     return false;
+  }
+}
+
+extension FicListExtension<T> on List<T> {
+  /// Maps each element of the list.
+  /// The [map] function gets both the original [item] and its [index].
+  Iterable<E> mapIndexed<E>(E Function(int index, T item) map) sync* {
+    for (var index = 0; index < length; index++) {
+      yield map(index, this[index]);
+    }
   }
 }

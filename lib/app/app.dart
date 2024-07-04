@@ -1,4 +1,3 @@
-import 'package:instacard/services/foo_firebase_service.dart';
 import 'package:instacard/services/foo_isar_service.dart';
 import 'package:instacard/ui/bottom_sheets/notice/notice_sheet.dart';
 import 'package:instacard/ui/dialogs/info_alert/info_alert_dialog.dart';

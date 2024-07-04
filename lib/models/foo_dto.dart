@@ -55,15 +55,52 @@ class FooDto with _$FooDto {
 
   Future<FooDto> saveFeaturedImage() async {
     FooDto item = this;
-    if (featuredImage.isNotEmpty) {
-      if (await deleteImageFromLocal(featuredImage)) {
-        item = copyWith(featuredImage: "");
+
+    bool hasPendingFiles() {
+      for (var i = 0; i < featuredImageUpload.length; i++) {
+        if (featuredImageUpload[i].file != null) {
+          return true;
+        }
       }
+      return false;
     }
-    if (featuredImageUpload.isNotEmpty) {
-      final filePath = await saveImageToLocal(featuredImageUpload[0].file);
-      item = copyWith(featuredImage: filePath);
+
+    bool shouldSaveOnlyImage = hasPendingFiles() && featuredImage.isEmpty;
+    bool shouldUpdateImage =
+        allowUpdate && hasPendingFiles() && featuredImage.isNotEmpty;
+    bool shouldDeleteImage =
+        featuredImageUpload.isEmpty && featuredImage.isNotEmpty;
+
+    if (shouldUpdateImage) {
+      List<String> filePaths = [];
+      for (var i = 0; i < featuredImageUpload.length; i++) {
+        if (featuredImageUpload[i].file != null) {
+          final filePath = await saveImageToLocal(featuredImageUpload[i].file);
+          filePaths.add(filePath);
+        }
+      }
+      await deleteImageFromLocal(featuredImage);
+
+      return copyWith(featuredImage: filePaths[0]);
     }
+
+    if (shouldSaveOnlyImage) {
+      List<String> filePaths = [];
+      for (var i = 0; i < featuredImageUpload.length; i++) {
+        if (featuredImageUpload[i].file != null) {
+          final filePath = await saveImageToLocal(featuredImageUpload[i].file);
+          filePaths.add(filePath);
+        }
+      }
+
+      return copyWith(featuredImage: filePaths[0]);
+    }
+
+    if (shouldDeleteImage) {
+      await deleteImageFromLocal(featuredImage);
+      return copyWith(featuredImage: "");
+    }
+
     return item;
   }
 
@@ -77,14 +114,17 @@ class FooDto with _$FooDto {
 
   FooDto toForm() {
     return copyWith(
-        colorPick: color == 0xffef5350 ? Colors.red : Colors.orange,
-        featuredImageUpload: featuredImage.isEmpty
-            ? []
-            : [
-                SelectedFile.image(
-                  url: featuredImage.toString(),
-                )
-              ]);
+        colorPick:
+            colorPick ?? ((color == 0xffef5350) ? Colors.red : Color(color)),
+        featuredImageUpload: featuredImageUpload.isNotEmpty
+            ? featuredImageUpload
+            : (featuredImage.isEmpty
+                ? []
+                : [
+                    SelectedFile.image(
+                      url: featuredImage.toString(),
+                    )
+                  ]));
   }
 
   factory FooDto.fromFirestore(
