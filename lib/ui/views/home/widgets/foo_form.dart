@@ -49,6 +49,16 @@ class FooForm extends StatelessWidget {
                               'Title must not be empty',
                         },
                       ),
+                      ReactiveTextField<DateTime>(
+                        formControl: formModel.updatedAtControl,
+                        decoration: const InputDecoration(
+                          labelText: 'Updated At',
+                        ),
+                        validationMessages: {
+                          ValidationMessage.required: (_) =>
+                              'Title must not be empty',
+                        },
+                      ),
                       ReactiveBlockColorPicker(
                         valueAccessor:
                             ColorValueAccessor(defaultColor: Colors.grey),
@@ -115,12 +125,10 @@ class FooForm extends StatelessWidget {
                                   onPressed: formModel.form.valid
                                       ? () async {
                                           await locator<FooService>()
-                                              .create(formModel.model);
+                                              .update(formModel.model);
 
-                                          formModel.form.reset(
-                                              value: FooDto().toJson(),
-                                              updateParent: true,
-                                              removeFocus: true);
+                                          formModel.form
+                                              .reset(removeFocus: true);
                                         }
                                       : null,
                                   child: const Text('UPDATE'),
