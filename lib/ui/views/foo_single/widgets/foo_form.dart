@@ -7,7 +7,7 @@ import 'package:instacard/helpers/freezed_helpers.dart';
 import 'package:instacard/models/foo_dto.dart';
 import 'package:instacard/services/foo_service.dart';
 import 'package:instacard/ui/common/ui_helpers.dart';
-import 'package:instacard/ui/views/home/home_viewmodel.dart';
+import 'package:instacard/ui/views/foo_single/foo_single_viewmodel.dart';
 import 'package:reactive_color_picker/reactive_color_picker.dart';
 import 'package:reactive_forms_annotations/reactive_forms_annotations.dart';
 import 'package:reactive_image_picker/reactive_image_picker.dart';
@@ -18,134 +18,127 @@ class FooForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = getParentViewModel<HomeViewModel>(context);
+    final viewModel = getParentViewModel<FooSingleViewModel>(context);
     return FooDtoFormBuilder(
         key: UniqueKey(),
-        model: viewModel.selectedItem,
+        model: viewModel.formModel,
         builder: (context, formModel, child) {
-          return Card(
-              margin: const EdgeInsets.all(0),
-              child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    children: [
-                      ReactiveTextField<int>(
-                        formControl: formModel.idControl,
-                        decoration: const InputDecoration(
-                          labelText: 'ID',
-                        ),
-                        validationMessages: {
-                          ValidationMessage.required: (_) =>
-                              'Title must not be empty',
-                        },
-                      ),
-                      ReactiveTextField<DateTime>(
-                        formControl: formModel.createdAtControl,
-                        decoration: const InputDecoration(
-                          labelText: 'Created At',
-                        ),
-                        validationMessages: {
-                          ValidationMessage.required: (_) =>
-                              'Title must not be empty',
-                        },
-                      ),
-                      ReactiveTextField<DateTime>(
-                        formControl: formModel.updatedAtControl,
-                        decoration: const InputDecoration(
-                          labelText: 'Updated At',
-                        ),
-                        validationMessages: {
-                          ValidationMessage.required: (_) =>
-                              'Title must not be empty',
-                        },
-                      ),
-                      ReactiveBlockColorPicker(
-                        valueAccessor:
-                            ColorValueAccessor(defaultColor: Colors.grey),
-                        pickerColor: Colors.grey,
-                        availableColors: const [
-                          Colors.red,
-                          Colors.orange,
-                          Colors.blue,
-                          Colors.purple,
-                          Colors.brown,
-                          Colors.grey
-                        ],
-                        formControl: formModel.colorPickControl,
-                      ),
-                      ReactiveTextField<String>(
-                        formControl: formModel.titleControl,
-                        decoration: const InputDecoration(
-                          labelText: 'Title',
-                        ),
-                        validationMessages: {
-                          ValidationMessage.required: (_) =>
-                              'Title must not be empty',
-                        },
-                      ),
-                      ReactiveTextField<String>(
-                        formControl: formModel.excerptControl,
-                        maxLines: 3,
-                        decoration: const InputDecoration(
-                          labelText: 'Excerpt',
-                        ),
-                        validationMessages: {
-                          ValidationMessage.required: (_) =>
-                              'Excerpt must not be empty',
-                        },
-                      ),
-                      vSpaceMedium,
-                      FeaturedImagePicker(
-                        formControl: formModel.featuredImageUploadControl,
-                      ),
-                      vSpaceSmall,
-                      ReactiveFooDtoFormConsumer(
-                        builder: (context, formModel, child) {
-                          return Column(
-                            children: [
-                              Text(formModel.form.pristine.toString()),
-                              if (formModel.model.allowCreate)
-                                ElevatedButton(
-                                  onPressed: formModel.form.valid
-                                      ? () async {
-                                          await locator<FooService>()
-                                              .create(formModel.model);
-                                          viewModel.selectedItem = FooDto();
-                                          formModel.form
-                                              .reset(removeFocus: true);
-
-                                          formModel.updateValue(
-                                              viewModel.selectedItem);
-                                        }
-                                      : null,
-                                  child: const Text('CREATE'),
-                                ),
-                              if (formModel.model.allowUpdate)
-                                ElevatedButton(
-                                  onPressed: formModel.form.valid
-                                      ? () async {
-                                          await locator<FooService>()
-                                              .update(formModel.model);
-
-                                          formModel.form
-                                              .reset(removeFocus: true);
-                                        }
-                                      : null,
-                                  child: const Text('UPDATE'),
-                                ),
-                            ],
-                          );
-                        },
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          formModel.form.reset(removeFocus: true);
-                          viewModel.selectedItem = FooDto().reset();
-                        },
-                        child: const Text('RESET'),
-                      ),
+          return Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                children: [
+                  ReactiveTextField<int>(
+                    formControl: formModel.idControl,
+                    decoration: const InputDecoration(
+                      labelText: 'ID',
+                    ),
+                    validationMessages: {
+                      ValidationMessage.required: (_) =>
+                          'Title must not be empty',
+                    },
+                  ),
+                  ReactiveTextField<DateTime>(
+                    formControl: formModel.createdAtControl,
+                    decoration: const InputDecoration(
+                      labelText: 'Created At',
+                    ),
+                    validationMessages: {
+                      ValidationMessage.required: (_) =>
+                          'Title must not be empty',
+                    },
+                  ),
+                  ReactiveTextField<DateTime>(
+                    formControl: formModel.updatedAtControl,
+                    decoration: const InputDecoration(
+                      labelText: 'Updated At',
+                    ),
+                    validationMessages: {
+                      ValidationMessage.required: (_) =>
+                          'Title must not be empty',
+                    },
+                  ),
+                  ReactiveBlockColorPicker(
+                    valueAccessor:
+                        ColorValueAccessor(defaultColor: Colors.grey),
+                    pickerColor: Colors.grey,
+                    availableColors: const [
+                      Colors.red,
+                      Colors.orange,
+                      Colors.blue,
+                      Colors.purple,
+                      Colors.brown,
+                      Colors.grey
                     ],
-                  )));
+                    formControl: formModel.colorPickControl,
+                  ),
+                  ReactiveTextField<String>(
+                    formControl: formModel.titleControl,
+                    decoration: const InputDecoration(
+                      labelText: 'Title',
+                    ),
+                    validationMessages: {
+                      ValidationMessage.required: (_) =>
+                          'Title must not be empty',
+                    },
+                  ),
+                  ReactiveTextField<String>(
+                    formControl: formModel.excerptControl,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                      labelText: 'Excerpt',
+                    ),
+                    validationMessages: {
+                      ValidationMessage.required: (_) =>
+                          'Excerpt must not be empty',
+                    },
+                  ),
+                  vSpaceMedium,
+                  FeaturedImagePicker(
+                    formControl: formModel.featuredImageUploadControl,
+                  ),
+                  vSpaceSmall,
+                  ReactiveFooDtoFormConsumer(
+                    builder: (context, formModel, child) {
+                      return Column(
+                        children: [
+                          if (formModel.model.allowCreate)
+                            ElevatedButton(
+                              onPressed: formModel.form.valid
+                                  ? () async {
+                                      await locator<FooService>()
+                                          .create(formModel.model);
+
+                                      formModel.form.reset(removeFocus: true);
+
+                                      formModel.updateValue(FooDto());
+                                    }
+                                  : null,
+                              child: const Text('CREATE'),
+                            ),
+                          if (formModel.model.allowUpdate)
+                            ElevatedButton(
+                              onPressed: formModel.form.valid
+                                  ? () async {
+                                      await locator<FooService>()
+                                          .update(formModel.model);
+
+                                      formModel.form.reset(removeFocus: true);
+                                    }
+                                  : null,
+                              child: const Text('UPDATE'),
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      viewModel.formModel = viewModel.formModel;
+                    },
+                    child: const Text('RESET'),
+                  ),
+                ],
+              ));
         });
   }
 }

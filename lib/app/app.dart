@@ -1,6 +1,7 @@
 import 'package:instacard/services/foo_isar_service.dart';
 import 'package:instacard/ui/bottom_sheets/notice/notice_sheet.dart';
 import 'package:instacard/ui/dialogs/info_alert/info_alert_dialog.dart';
+import 'package:instacard/ui/views/foo/foo_viewmodel.dart';
 import 'package:instacard/ui/views/home/home_view.dart';
 import 'package:instacard/ui/views/home/home_viewmodel.dart';
 import 'package:instacard/ui/views/startup/startup_view.dart';
@@ -10,13 +11,19 @@ import 'package:instacard/services/local_storage_service.dart';
 import 'package:instacard/services/sharedpreferences_local_storage_service.dart';
 import 'package:instacard/services/foo_service.dart';
 
+import 'package:instacard/ui/views/foo/foo_view.dart';
+
+import 'package:instacard/ui/views/foo_single/foo_single_view.dart';
+
 // @stacked-import
 @StackedApp(
   logger: StackedLogger(),
   routes: [
     MaterialRoute(page: HomeView),
     MaterialRoute(page: StartupView),
-    // @stacked-route
+    MaterialRoute(initial: true, page: FooView),
+    MaterialRoute(page: FooSingleView),
+// @stacked-route
   ],
   dependencies: [
     LazySingleton(classType: BottomSheetService),
@@ -30,7 +37,7 @@ import 'package:instacard/services/foo_service.dart';
       classType: FooIsarService,
       asType: FooService,
     ),
-
+    Singleton(classType: FooViewModel),
     Singleton(classType: HomeViewModel),
 // @stacked-service
   ],

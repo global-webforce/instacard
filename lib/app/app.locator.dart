@@ -15,6 +15,7 @@ import '../services/foo_isar_service.dart';
 import '../services/foo_service.dart';
 import '../services/local_storage_service.dart';
 import '../services/sharedpreferences_local_storage_service.dart';
+import '../ui/views/foo/foo_viewmodel.dart';
 import '../ui/views/home/home_viewmodel.dart';
 
 final locator = StackedLocator.instance;
@@ -41,5 +42,6 @@ Future<void> setupLocator({
   await fooIsarService.init();
   locator.registerSingleton<FooService>(fooIsarService);
 
+  locator.registerSingleton(FooViewModel());
   locator.registerSingleton(HomeViewModel());
 }

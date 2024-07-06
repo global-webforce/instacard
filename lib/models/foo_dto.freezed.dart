@@ -20,9 +20,9 @@ FooDto _$FooDtoFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$FooDto {
-  @RfControl()
+  @RfControl(disabled: true)
   int get id => throw _privateConstructorUsedError;
-  @RfControl()
+  @RfControl(validators: [RequiredValidator()])
   String get title => throw _privateConstructorUsedError;
   @RfControl()
   String get excerpt => throw _privateConstructorUsedError;
@@ -30,9 +30,9 @@ mixin _$FooDto {
   int get color => throw _privateConstructorUsedError;
   @RfControl()
   String get featuredImage => throw _privateConstructorUsedError;
-  @RfControl()
+  @RfControl(disabled: true)
   DateTime? get createdAt => throw _privateConstructorUsedError;
-  @RfControl()
+  @RfControl(disabled: true)
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   @ignore
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -55,13 +55,13 @@ abstract class $FooDtoCopyWith<$Res> {
       _$FooDtoCopyWithImpl<$Res, FooDto>;
   @useResult
   $Res call(
-      {@RfControl() int id,
-      @RfControl() String title,
+      {@RfControl(disabled: true) int id,
+      @RfControl(validators: [RequiredValidator()]) String title,
       @RfControl() String excerpt,
       @RfControl() int color,
       @RfControl() String featuredImage,
-      @RfControl() DateTime? createdAt,
-      @RfControl() DateTime? updatedAt,
+      @RfControl(disabled: true) DateTime? createdAt,
+      @RfControl(disabled: true) DateTime? updatedAt,
       @ignore
       @JsonKey(includeFromJson: false, includeToJson: false)
       @RfControl()
@@ -144,13 +144,13 @@ abstract class _$$FooDtoImplCopyWith<$Res> implements $FooDtoCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@RfControl() int id,
-      @RfControl() String title,
+      {@RfControl(disabled: true) int id,
+      @RfControl(validators: [RequiredValidator()]) String title,
       @RfControl() String excerpt,
       @RfControl() int color,
       @RfControl() String featuredImage,
-      @RfControl() DateTime? createdAt,
-      @RfControl() DateTime? updatedAt,
+      @RfControl(disabled: true) DateTime? createdAt,
+      @RfControl(disabled: true) DateTime? updatedAt,
       @ignore
       @JsonKey(includeFromJson: false, includeToJson: false)
       @RfControl()
@@ -227,17 +227,17 @@ class __$$FooDtoImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$FooDtoImpl extends _FooDto {
   _$FooDtoImpl(
-      {@RfControl() this.id = Isar.autoIncrement,
-      @RfControl() this.title = '',
+      {@RfControl(disabled: true) this.id = Isar.autoIncrement,
+      @RfControl(validators: [RequiredValidator()]) this.title = '',
       @RfControl() this.excerpt = '',
       @RfControl() this.color = 0xffef5350,
       @RfControl() this.featuredImage = '',
-      @RfControl() this.createdAt,
-      @RfControl() this.updatedAt,
+      @RfControl(disabled: true) this.createdAt,
+      @RfControl(disabled: true) this.updatedAt,
       @ignore
       @JsonKey(includeFromJson: false, includeToJson: false)
       @RfControl()
-      this.colorPick = Colors.orange,
+      this.colorPick = Colors.red,
       @JsonKey(includeFromJson: false, includeToJson: false)
       @ignore
       @RfControl()
@@ -250,11 +250,11 @@ class _$FooDtoImpl extends _FooDto {
 
   @override
   @JsonKey()
-  @RfControl()
+  @RfControl(disabled: true)
   final int id;
   @override
   @JsonKey()
-  @RfControl()
+  @RfControl(validators: [RequiredValidator()])
   final String title;
   @override
   @JsonKey()
@@ -269,10 +269,10 @@ class _$FooDtoImpl extends _FooDto {
   @RfControl()
   final String featuredImage;
   @override
-  @RfControl()
+  @RfControl(disabled: true)
   final DateTime? createdAt;
   @override
-  @RfControl()
+  @RfControl(disabled: true)
   final DateTime? updatedAt;
   @override
   @ignore
@@ -347,13 +347,13 @@ class _$FooDtoImpl extends _FooDto {
 
 abstract class _FooDto extends FooDto {
   factory _FooDto(
-      {@RfControl() final int id,
-      @RfControl() final String title,
+      {@RfControl(disabled: true) final int id,
+      @RfControl(validators: [RequiredValidator()]) final String title,
       @RfControl() final String excerpt,
       @RfControl() final int color,
       @RfControl() final String featuredImage,
-      @RfControl() final DateTime? createdAt,
-      @RfControl() final DateTime? updatedAt,
+      @RfControl(disabled: true) final DateTime? createdAt,
+      @RfControl(disabled: true) final DateTime? updatedAt,
       @ignore
       @JsonKey(includeFromJson: false, includeToJson: false)
       @RfControl()
@@ -367,10 +367,10 @@ abstract class _FooDto extends FooDto {
   factory _FooDto.fromJson(Map<String, dynamic> json) = _$FooDtoImpl.fromJson;
 
   @override
-  @RfControl()
+  @RfControl(disabled: true)
   int get id;
   @override
-  @RfControl()
+  @RfControl(validators: [RequiredValidator()])
   String get title;
   @override
   @RfControl()
@@ -382,10 +382,10 @@ abstract class _FooDto extends FooDto {
   @RfControl()
   String get featuredImage;
   @override
-  @RfControl()
+  @RfControl(disabled: true)
   DateTime? get createdAt;
   @override
-  @RfControl()
+  @RfControl(disabled: true)
   DateTime? get updatedAt;
   @override
   @ignore

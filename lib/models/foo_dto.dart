@@ -19,13 +19,17 @@ class FooDto with _$FooDto {
   )
   FooDto._();
   factory FooDto({
-    @RfControl() @Default(Isar.autoIncrement) Id id,
-    @RfControl() @Default('') String title,
+    @RfControl(disabled: true) @Default(Isar.autoIncrement) Id id,
+    @RfControl(validators: [
+      RequiredValidator(),
+    ])
+    @Default('')
+    String title,
     @RfControl() @Default('') String excerpt,
     @RfControl() @Default(0xffef5350) int color,
     @RfControl() @Default('') String featuredImage,
-    @RfControl() DateTime? createdAt,
-    @RfControl() DateTime? updatedAt,
+    @RfControl(disabled: true) DateTime? createdAt,
+    @RfControl(disabled: true) DateTime? updatedAt,
     @ignore
     @JsonKey(
       includeFromJson: false,
