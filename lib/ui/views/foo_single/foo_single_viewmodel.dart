@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reactive_forms_annotations/reactive_forms_annotations.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -10,7 +11,18 @@ class FooSingleViewModel extends ReactiveViewModel {
   final _fooService = locator<FooService>();
   final _dialogService = locator<DialogService>();
 
-  FooDto formModel = FooDto();
+  FooDto formModelOrig = FooDto();
+  FooDto _formModel = FooDto();
+  FooDto get formModel => _formModel.view();
+  set formModel(FooDto f) {
+    _formModel = f;
+    rebuildUi();
+  }
+
+  reset() {
+    _formModel = formModelOrig;
+    rebuildUi();
+  }
 
   @override
   void onFutureError(error, Object? key) {

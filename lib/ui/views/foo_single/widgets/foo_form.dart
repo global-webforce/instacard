@@ -14,7 +14,9 @@ import 'package:reactive_image_picker/reactive_image_picker.dart';
 import 'package:stacked/stacked.dart';
 
 class FooForm extends StatelessWidget {
-  const FooForm({super.key});
+  const FooForm({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +135,7 @@ class FooForm extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      viewModel.formModel = viewModel.formModel;
+                      viewModel.reset();
                     },
                     child: const Text('RESET'),
                   ),
