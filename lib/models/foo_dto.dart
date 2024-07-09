@@ -53,6 +53,51 @@ class FooDto with _$FooDto {
   @ignore
   get allowUpdate => id > 0 ? true : false;
 
+  factory FooDto.fromJson(Map<String, dynamic> json) =>
+      _$FooDtoFromJson(json.map((key, value) => MapEntry(
+          key, key == 'id' && value is String ? fastHash(value) : value)));
+
+  factory FooDto.form() {
+    return FooDto();
+  }
+
+  FooDto view() {
+    return copyWith(
+      colorPick: Color(color),
+      featuredImageUpload: [
+        if (featuredImage.isNotEmpty)
+          SelectedFile.image(
+            url: featuredImage.toString(),
+          )
+      ],
+    );
+  }
+
+  FooDto reset() {
+    return FooDto(colorPick: Colors.orange, featuredImageUpload: []);
+  }
+
+  FooDto create() {
+    return copyWith(
+      color: colorPick?.value ?? Colors.red.value,
+      createdAt: Timestamp.now().toDate(),
+    );
+  }
+
+  FooDto update() {
+    return copyWith(
+      color: colorPick?.value ?? Colors.red.value,
+      updatedAt: Timestamp.now().toDate(),
+    );
+  }
+
+  factory FooDto.fromFirestore(
+          DocumentSnapshot snapshot, SnapshotOptions? options) =>
+      FooDto.fromJson(snapshot.data() as Map<String, dynamic>);
+
+  static Map<String, Object?> toFirestore(FooDto foo, SetOptions? options) =>
+      foo.toJson();
+
   Future<FooDto> saveFeaturedImage() async {
     FooDto item = this;
 
@@ -103,49 +148,4 @@ class FooDto with _$FooDto {
 
     return item;
   }
-
-  factory FooDto.fromJson(Map<String, dynamic> json) =>
-      _$FooDtoFromJson(json.map((key, value) => MapEntry(
-          key, key == 'id' && value is String ? fastHash(value) : value)));
-
-  factory FooDto.form() {
-    return FooDto();
-  }
-
-  FooDto view() {
-    return copyWith(
-      colorPick: Color(color),
-      featuredImageUpload: [
-        if (featuredImage.isNotEmpty)
-          SelectedFile.image(
-            url: featuredImage.toString(),
-          )
-      ],
-    );
-  }
-
-  FooDto reset() {
-    return FooDto(colorPick: Colors.orange, featuredImageUpload: []);
-  }
-
-  FooDto create() {
-    return copyWith(
-      color: colorPick?.value ?? Colors.red.value,
-      createdAt: Timestamp.now().toDate(),
-    );
-  }
-
-  FooDto update() {
-    return copyWith(
-      color: colorPick?.value ?? Colors.red.value,
-      updatedAt: Timestamp.now().toDate(),
-    );
-  }
-
-  factory FooDto.fromFirestore(
-          DocumentSnapshot snapshot, SnapshotOptions? options) =>
-      FooDto.fromJson(snapshot.data() as Map<String, dynamic>);
-
-  static Map<String, Object?> toFirestore(FooDto foo, SetOptions? options) =>
-      foo.toJson();
 }
