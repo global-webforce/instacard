@@ -6,6 +6,7 @@ abstract class CrudService<T> with ListenableServiceMixin {
   CrudService() {
     listenToReactiveValues([_items, _selectedItem]);
   }
+
   final ReactiveValue<List<T>> _items = ReactiveValue<List<T>>([]);
   final ReactiveValue<T?> _selectedItem = ReactiveValue<T?>(null);
 
@@ -22,7 +23,7 @@ abstract class CrudService<T> with ListenableServiceMixin {
   }
 
   Future fetchAll();
-  Future<T?> findById(int id);
+  Future findById(int id);
   Future create(T item);
   Future update(T item);
   Future delete(int id);

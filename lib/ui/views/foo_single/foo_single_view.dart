@@ -29,6 +29,7 @@ class FooSingleView extends StackedView<FooSingleViewModel> {
   void onViewModelReady(FooSingleViewModel viewModel) {
     viewModel.formModel = foo;
     viewModel.formModelOrig = foo;
+
     super.onViewModelReady(viewModel);
   }
 

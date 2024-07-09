@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:instacard/helpers/freezed_helpers.dart';
 import 'package:isar/isar.dart';
-
 import 'package:reactive_forms_annotations/reactive_forms_annotations.dart';
 import 'package:reactive_image_picker/reactive_image_picker.dart';
 part 'foo_dto.freezed.dart';
@@ -14,9 +13,6 @@ part 'foo_dto.gform.dart';
 @Collection(ignore: {'copyWith'})
 @Rf()
 class FooDto with _$FooDto {
-  @JsonSerializable(
-    fieldRename: FieldRename.snake,
-  )
   FooDto._();
   factory FooDto({
     @RfControl(disabled: true) @Default(Isar.autoIncrement) Id id,

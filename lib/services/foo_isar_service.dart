@@ -14,8 +14,12 @@ class FooIsarService extends FooService implements InitializableDependency {
 
   @override
   Future fetchAll() async {
-    final isar = await _db;
-    isar.fooDtos.where().findAll().then((value) => items = value);
+    try {
+      final isar = await _db;
+      isar.fooDtos.where().findAll().then((value) => items = value);
+    } catch (e) {
+      return e;
+    }
   }
 
   @override
@@ -26,17 +30,17 @@ class FooIsarService extends FooService implements InitializableDependency {
 
   @override
   Future create(FooDto item) async {
-    final isar = await _db;
-
-    item = await item.saveFeaturedImage();
-
-    await isar.writeTxn(() async {
-      await isar.fooDtos.put(item.create());
-    });
-
-    selectedItem = item;
-
-    await fetchAll();
+    try {
+      final isar = await _db;
+      item = await item.saveFeaturedImage();
+      await isar.writeTxn(() async {
+        final id = await isar.fooDtos.put(item.create());
+        item = item.copyWith(id: id);
+      });
+      return item;
+    } catch (e) {
+      return e;
+    }
   }
 
   @override
@@ -52,7 +56,7 @@ class FooIsarService extends FooService implements InitializableDependency {
         selectedItem = foo;
       });
     });
-    await fetchAll();
+    fetchAll();
   }
 
   @override

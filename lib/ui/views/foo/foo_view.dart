@@ -31,7 +31,7 @@ class FooView extends StackedView<FooViewModel> {
     Widget? child,
   ) {
     return ScreenScaffold(
-        refreshIndicatorTask: viewModel.init,
+        refreshIndicatorTask: () => viewModel.init(),
         isBusy: viewModel.isBusy,
         title: "Instacard",
         actions: [

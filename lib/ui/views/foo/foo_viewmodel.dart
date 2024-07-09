@@ -2,6 +2,7 @@ import 'package:instacard/app/app.locator.dart';
 import 'package:flutter/material.dart';
 import 'package:instacard/models/foo_dto.dart';
 import 'package:instacard/services/foo_service.dart';
+
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -30,11 +31,14 @@ class FooViewModel extends ReactiveViewModel {
   }
 
   Future init() async {
-    await runBusyFuture(
-        Future.wait([
-          _fooService.fetchAll(),
-        ]),
-        throwException: true);
+    setBusy(true);
+    try {
+      await Future.wait([_fooService.fetchAll()]);
+    } catch (e) {
+      onFutureError(e, '');
+    }
+
+    setBusy(false);
   }
 
   @override

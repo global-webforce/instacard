@@ -5,10 +5,8 @@ import 'package:stacked_services/stacked_services.dart';
 
 import 'package:instacard/app/app.locator.dart';
 import 'package:instacard/models/foo_dto.dart';
-import 'package:instacard/services/foo_service.dart';
 
 class FooSingleViewModel extends ReactiveViewModel {
-  final _fooService = locator<FooService>();
   final _dialogService = locator<DialogService>();
 
   FooDto formModelOrig = FooDto();
@@ -36,11 +34,4 @@ class FooSingleViewModel extends ReactiveViewModel {
           buttonTitle: "OK");
     });
   }
-
-  set selectedItem(FooDto? item) {
-    _fooService.selectedItem = item;
-  }
-
-  @override
-  List<ListenableServiceMixin> get listenableServices => [_fooService];
 }
