@@ -23,9 +23,13 @@ class FooIsarService extends FooService implements InitializableDependency {
   }
 
   @override
-  Future<FooDto?> findById(int id) async {
-    final isar = await _db;
-    return await isar.fooDtos.filter().idEqualTo(id).findFirst();
+  Future findById(int id) async {
+    try {
+      final isar = await _db;
+      return await isar.fooDtos.filter().idEqualTo(id).findFirst();
+    } catch (e) {
+      return e;
+    }
   }
 
   @override

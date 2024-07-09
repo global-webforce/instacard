@@ -9,6 +9,8 @@ part 'foo_dto.freezed.dart';
 part 'foo_dto.g.dart';
 part 'foo_dto.gform.dart';
 
+const int defaultColor = 0xFF9C27B0;
+
 @freezed
 @Collection(ignore: {'copyWith'})
 @Rf()
@@ -22,7 +24,7 @@ class FooDto with _$FooDto {
     @Default('')
     String title,
     @RfControl() @Default('') String excerpt,
-    @RfControl() @Default(0xffef5350) int color,
+    @RfControl() @Default(defaultColor) int color,
     @RfControl() @Default('') String featuredImage,
     @RfControl(disabled: true) DateTime? createdAt,
     @RfControl(disabled: true) DateTime? updatedAt,
@@ -32,7 +34,7 @@ class FooDto with _$FooDto {
       includeToJson: false,
     )
     @RfControl()
-    @Default(Colors.red)
+    @Default(Color(defaultColor))
     Color? colorPick,
     @JsonKey(
       includeFromJson: false,
@@ -47,11 +49,23 @@ class FooDto with _$FooDto {
   // ignore: recursive_getters, annotate_overrides
   Id get id => id;
 
+  /// If true, model don't exists on DB - suitable for insertion.
+  /// If false, model already exists on DB - suitable for update.
   @ignore
-  get allowCreate => id < 0 ? true : false;
+  get hasValidId => id >= 0 ? true : false;
 
   @ignore
-  get allowUpdate => id > 0 ? true : false;
+  Color get getColor => hasValidId ? Color(color) : colorPick ?? Colors.orange;
+
+  @ignore
+  List<SelectedFile> get getFeaturedImage => hasValidId
+      ? [
+          if (featuredImage.isNotEmpty)
+            SelectedFile.image(
+              url: featuredImage.toString(),
+            )
+        ]
+      : featuredImageUpload;
 
   factory FooDto.fromJson(Map<String, dynamic> json) =>
       _$FooDtoFromJson(json.map((key, value) => MapEntry(
@@ -62,31 +76,24 @@ class FooDto with _$FooDto {
   }
 
   FooDto view() {
-    return copyWith(
-      colorPick: Color(color),
-      featuredImageUpload: [
-        if (featuredImage.isNotEmpty)
-          SelectedFile.image(
-            url: featuredImage.toString(),
-          )
-      ],
-    );
+    return copyWith(colorPick: getColor, featuredImageUpload: getFeaturedImage);
   }
 
   FooDto reset() {
-    return FooDto(colorPick: Colors.orange, featuredImageUpload: []);
+    return FooDto(
+        colorPick: const Color(defaultColor), featuredImageUpload: []);
   }
 
   FooDto create() {
     return copyWith(
-      color: colorPick?.value ?? Colors.red.value,
+      color: colorPick?.value ?? defaultColor,
       createdAt: Timestamp.now().toDate(),
     );
   }
 
   FooDto update() {
     return copyWith(
-      color: colorPick?.value ?? Colors.red.value,
+      color: colorPick?.value ?? defaultColor,
       updatedAt: Timestamp.now().toDate(),
     );
   }
@@ -98,6 +105,7 @@ class FooDto with _$FooDto {
   static Map<String, Object?> toFirestore(FooDto foo, SetOptions? options) =>
       foo.toJson();
 
+  /// Save the Files inside featuredImageUpload and assigns the file storage path on featuredImage.
   Future<FooDto> saveFeaturedImage() async {
     FooDto item = this;
 
@@ -112,7 +120,7 @@ class FooDto with _$FooDto {
 
     bool shouldSaveOnlyImage = hasPendingFiles() && featuredImage.isEmpty;
     bool shouldUpdateImage =
-        allowUpdate && hasPendingFiles() && featuredImage.isNotEmpty;
+        hasValidId && hasPendingFiles() && featuredImage.isNotEmpty;
     bool shouldDeleteImage =
         featuredImageUpload.isEmpty && featuredImage.isNotEmpty;
 

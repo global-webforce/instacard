@@ -91,20 +91,32 @@ extension FicListExtension<T> on List<T> {
   }
 }
 
-class ColorValueAccessor extends ControlValueAccessor<Color, double> {
-  final Color defaultColor;
-
-  ColorValueAccessor({required this.defaultColor});
+class IntToColorConverter implements JsonConverter<Color, int> {
+  const IntToColorConverter();
 
   @override
-  double modelToViewValue(Color? modelValue) {
-    // Convert the Color to a double (ARGB value)
-    return (modelValue ?? defaultColor).value.toDouble();
+  Color fromJson(int? val) {
+    return val == null ? Colors.red : Color(val);
   }
 
   @override
-  Color viewToModelValue(double? viewValue) {
-    // Convert the double (ARGB value) back to a Color
-    return viewValue != null ? Color(viewValue.toInt()) : Colors.blue;
+  int toJson(Color val) => val.value;
+}
+
+class FilePathToFileConverter
+    implements JsonConverter<List<SelectedFile>, List<String>> {
+  const FilePathToFileConverter();
+
+  @override
+  List<SelectedFile> fromJson(List<String>? val) {
+    return val == null
+        ? []
+        : val.mapIndexed((i, e) => SelectedFile.image(url: e)).toList();
   }
+
+  @override
+
+  /// Don't forget to update this with actual path file of saved images!!!
+  List<String> toJson(List<SelectedFile> val) =>
+      val.map((e) => e.toString()).toList();
 }

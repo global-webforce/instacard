@@ -60,8 +60,6 @@ class FooForm extends StatelessWidget {
                     },
                   ),
                   ReactiveBlockColorPicker(
-                    valueAccessor:
-                        ColorValueAccessor(defaultColor: Colors.grey),
                     pickerColor: Colors.grey,
                     availableColors: const [
                       Colors.red,
@@ -103,7 +101,7 @@ class FooForm extends StatelessWidget {
                     builder: (context, formModel, child) {
                       return Column(
                         children: [
-                          if (formModel.model.allowCreate)
+                          if (formModel.model.hasValidId == false)
                             ElevatedButton(
                               onPressed: formModel.form.valid
                                   ? () async {
@@ -117,14 +115,14 @@ class FooForm extends StatelessWidget {
                                   : null,
                               child: const Text('CREATE'),
                             ),
-                          if (formModel.model.allowUpdate)
+                          if (formModel.model.hasValidId)
                             ElevatedButton(
                               onPressed: formModel.form.valid
                                   ? () async {
                                       await locator<FooService>()
                                           .update(formModel.model);
 
-                                      formModel.form.reset(removeFocus: true);
+                                      formModel.updateValue(FooDto());
                                     }
                                   : null,
                               child: const Text('UPDATE'),

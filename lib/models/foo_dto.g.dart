@@ -1108,7 +1108,7 @@ _$FooDtoImpl _$$FooDtoImplFromJson(Map<String, dynamic> json) => _$FooDtoImpl(
       id: (json['id'] as num?)?.toInt() ?? Isar.autoIncrement,
       title: json['title'] as String? ?? '',
       excerpt: json['excerpt'] as String? ?? '',
-      color: (json['color'] as num?)?.toInt() ?? 0xffef5350,
+      color: (json['color'] as num?)?.toInt() ?? defaultColor,
       featuredImage: json['featuredImage'] as String? ?? '',
       createdAt: json['createdAt'] == null
           ? null

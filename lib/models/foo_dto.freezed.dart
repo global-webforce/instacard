@@ -230,14 +230,14 @@ class _$FooDtoImpl extends _FooDto {
       {@RfControl(disabled: true) this.id = Isar.autoIncrement,
       @RfControl(validators: [RequiredValidator()]) this.title = '',
       @RfControl() this.excerpt = '',
-      @RfControl() this.color = 0xffef5350,
+      @RfControl() this.color = defaultColor,
       @RfControl() this.featuredImage = '',
       @RfControl(disabled: true) this.createdAt,
       @RfControl(disabled: true) this.updatedAt,
       @ignore
       @JsonKey(includeFromJson: false, includeToJson: false)
       @RfControl()
-      this.colorPick = Colors.red,
+      this.colorPick = const Color(defaultColor),
       @JsonKey(includeFromJson: false, includeToJson: false)
       @ignore
       @RfControl()
