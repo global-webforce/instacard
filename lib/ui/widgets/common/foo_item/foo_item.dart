@@ -31,7 +31,7 @@ class FooItem extends StackedView<FooItemModel> {
                 children: [
                   Builder(builder: (context) {
                     return Card(
-                      color: foo.getColor,
+                      color: Color(foo.color),
                       margin: const EdgeInsets.all(0),
                       clipBehavior: Clip.antiAlias,
                       child: Column(
@@ -45,7 +45,7 @@ class FooItem extends StackedView<FooItemModel> {
                             errorBuilder: (context, url, error) => Expanded(
                               child: Container(
                                 width: double.infinity,
-                                color: foo.getColor.darken(0.2),
+                                color: Color(foo.color).darken(0.2),
                                 child: const Icon(
                                   Icons.image_rounded,
                                 ),

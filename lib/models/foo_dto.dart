@@ -55,9 +55,6 @@ class FooDto with _$FooDto {
   get hasValidId => id >= 0 ? true : false;
 
   @ignore
-  Color get getColor => hasValidId ? Color(color) : colorPick ?? Colors.orange;
-
-  @ignore
   List<SelectedFile> get getFeaturedImage => hasValidId
       ? [
           if (featuredImage.isNotEmpty)
@@ -70,15 +67,6 @@ class FooDto with _$FooDto {
   factory FooDto.fromJson(Map<String, dynamic> json) =>
       _$FooDtoFromJson(json.map((key, value) => MapEntry(
           key, key == 'id' && value is String ? fastHash(value) : value)));
-
-  factory FooDto.form() {
-    return FooDto();
-  }
-
-  FooDto reset() {
-    return FooDto(
-        colorPick: const Color(defaultColor), featuredImageUpload: []);
-  }
 
   Future<FooDto> fromForm() async {
     FooDto item = this;

@@ -292,6 +292,34 @@ class FeaturedImagePicker extends StatelessWidget {
           }
         }).toList());
       },
+      deleteDialogBuilder: (context, onConfirm) {
+        return showDialog<void>(
+          context: context,
+          barrierDismissible: false, // User must tap button to dismiss dialog
+          builder: (BuildContext dialogContext) {
+            return AlertDialog(
+              title: const Text('Delete File'),
+              content:
+                  const Text('Are you sure you want to delete this file?!!'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop(); // Dismiss the dialog
+                  },
+                ),
+                TextButton(
+                  child: const Text('Delete'),
+                  onPressed: () {
+                    onConfirm(formControl!.value![0]);
+                    Navigator.of(dialogContext).pop(); // Dismiss the dialog
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
       inputBuilder: (onPressed) => TextButton.icon(
         onPressed: onPressed,
         icon: const Icon(Icons.add),
