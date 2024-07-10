@@ -240,44 +240,55 @@ class FeaturedImagePicker extends StatelessWidget {
         return Column(
             children: image.mapIndexed((index, image) {
           {
-            return Center(
-                child: GestureDetector(
-              onTap: () => handleChange(context, image),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: AspectRatio(
-                  aspectRatio: 4 / 3, // 4:3 aspect ratio
-                  child: Image(
-                    height: 120,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    image: FileImage(File("${image.url ?? image.file?.path}")),
-                    errorBuilder: (context, url, error) => const Expanded(
-                      child: SizedBox(
+            return Stack(
+              children: [
+                Center(
+                    child: GestureDetector(
+                  onTap: () => handleChange(context, image),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: AspectRatio(
+                      aspectRatio: 4 / 3, // 4:3 aspect ratio
+                      child: Image(
+                        height: 120,
                         width: double.infinity,
-                        child: Icon(
-                          Icons.image_rounded,
+                        fit: BoxFit.cover,
+                        image:
+                            FileImage(File("${image.url ?? image.file?.path}")),
+                        errorBuilder: (context, url, error) => const Expanded(
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Icon(
+                              Icons.image_rounded,
+                            ),
+                          ),
                         ),
+                        loadingBuilder: (_, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            // Show the loaded image if loading is complete.
+                            return child;
+                          } else {
+                            // Show a loading indicator with progress information.
+                            return Container(
+                              color: Colors.grey[300],
+                              height: 120,
+                              width: double.infinity,
+                            );
+                          }
+                        },
                       ),
                     ),
-                    loadingBuilder:
-                        (_, Widget child, ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        // Show the loaded image if loading is complete.
-                        return child;
-                      } else {
-                        // Show a loading indicator with progress information.
-                        return Container(
-                          color: Colors.grey[300],
-                          height: 120,
-                          width: double.infinity,
-                        );
-                      }
-                    },
                   ),
+                )),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                      onPressed: () => handleDelete(context, image),
+                      icon: const Icon(color: Colors.red, Icons.close)),
                 ),
-              ),
-            ));
+              ],
+            );
           }
         }).toList());
       },
