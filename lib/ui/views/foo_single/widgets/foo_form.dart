@@ -105,12 +105,7 @@ class FooForm extends StatelessWidget {
                             ElevatedButton(
                               onPressed: formModel.form.valid
                                   ? () async {
-                                      await locator<FooService>()
-                                          .create(formModel.model);
-
-                                      formModel.form.reset(removeFocus: true);
-
-                                      formModel.updateValue(FooDto());
+                                      await viewModel.create(formModel.model);
                                     }
                                   : null,
                               child: const Text('CREATE'),
@@ -119,8 +114,7 @@ class FooForm extends StatelessWidget {
                             ElevatedButton(
                               onPressed: formModel.form.valid
                                   ? () async {
-                                      await locator<FooService>()
-                                          .update(formModel.model);
+                                      await viewModel.update(formModel.model);
                                     }
                                   : null,
                               child: const Text('UPDATE'),

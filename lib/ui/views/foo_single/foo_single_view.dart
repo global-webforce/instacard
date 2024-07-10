@@ -20,15 +20,16 @@ class FooSingleView extends StackedView<FooSingleViewModel> {
         title: "",
         actions: const [],
         body: const CustomScrollView(
-          slivers: [SliverToBoxAdapter(child: FooForm())],
+          slivers: [
+            SliverToBoxAdapter(child: FooForm()),
+          ],
         ));
   }
 
   @override
   void onViewModelReady(FooSingleViewModel viewModel) {
     viewModel.formModel = foo;
-    viewModel.formModelOrig = foo;
-
+    viewModel.formModelOriginal = foo;
     super.onViewModelReady(viewModel);
   }
 

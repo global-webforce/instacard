@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instacard/services/foo_service.dart';
 import 'package:reactive_forms_annotations/reactive_forms_annotations.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -8,18 +9,31 @@ import 'package:instacard/models/foo_dto.dart';
 
 class FooSingleViewModel extends ReactiveViewModel {
   final _dialogService = locator<DialogService>();
+  final _fooService = locator<FooService>();
 
-  FooDto formModelOrig = FooDto();
+  FooDto formModelOriginal = FooDto();
   FooDto _formModel = FooDto();
   FooDto get formModel => _formModel;
-  set formModel(FooDto f) {
-    _formModel = f;
+  set formModel(FooDto model) {
+    _formModel = model;
     rebuildUi();
   }
 
   reset() {
-    _formModel = formModelOrig;
+    formModel = formModelOriginal;
     rebuildUi();
+  }
+
+  Future create(FooDto item) async {
+    final x = await _fooService.create(item);
+    formModelOriginal = x;
+    formModel = x;
+  }
+
+  Future update(FooDto item) async {
+    final x = await _fooService.create(item);
+    formModelOriginal = x;
+    formModel = x;
   }
 
   @override

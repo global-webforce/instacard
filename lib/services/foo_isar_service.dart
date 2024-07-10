@@ -44,6 +44,7 @@ class FooIsarService extends FooService implements InitializableDependency {
         final id = await isar.fooDtos.put(item);
         item = item.copyWith(id: id);
       });
+      await fetchAll();
       return item;
     } catch (e) {
       return e;
@@ -52,18 +53,17 @@ class FooIsarService extends FooService implements InitializableDependency {
 
   @override
   Future update(FooDto item) async {
-    final isar = await _db;
-
-    item = await item.fromForm();
-
-    await isar.writeTxn(() async {
-      await isar.fooDtos.put(item).then((id) async {
-        final FooDto? foo =
-            await isar.fooDtos.filter().idEqualTo(id).findFirst();
-        selectedItem = foo;
+    try {
+      final isar = await _db;
+      item = await item.fromForm();
+      await isar.writeTxn(() async {
+        await isar.fooDtos.put(item);
       });
-    });
-    fetchAll();
+      await fetchAll();
+      return item;
+    } catch (e) {
+      return e;
+    }
   }
 
   @override
