@@ -26,5 +26,5 @@ abstract class CrudService<T> with ListenableServiceMixin {
   Future findById(int id);
   Future create(T item);
   Future update(T item);
-  Future delete(int id);
+  Future delete(T item);
 }

@@ -36,6 +36,12 @@ class FooSingleViewModel extends ReactiveViewModel {
     formModel = newItem;
   }
 
+  Future delete(FooDto item) async {
+    await _fooService.delete(item);
+    formModelOriginal = FooDto();
+    formModel = FooDto();
+  }
+
   @override
   void onFutureError(error, Object? key) {
     super.onFutureError(error, key);

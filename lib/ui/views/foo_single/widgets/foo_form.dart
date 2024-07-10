@@ -119,6 +119,13 @@ class FooForm extends StatelessWidget {
                                   : null,
                               child: const Text('UPDATE'),
                             ),
+                          if (formModel.model.hasValidId)
+                            ElevatedButton(
+                              onPressed: () async {
+                                await viewModel.delete(formModel.model);
+                              },
+                              child: const Text('DELETE'),
+                            ),
                         ],
                       );
                     },

@@ -65,7 +65,7 @@ class FooFirebaseService extends FooService {
   }
 
   @override
-  Future<void> delete(int id) async {
-    await collectionRef.doc(id.toString()).delete();
+  Future delete(FooDto item) async {
+    await collectionRef.doc(item.id.toString()).delete();
   }
 }

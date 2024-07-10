@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:instacard/helpers/freezed_helpers.dart';
 import 'package:instacard/models/foo_dto.dart';
 import 'package:isar/isar.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -67,13 +68,16 @@ class FooIsarService extends FooService implements InitializableDependency {
   }
 
   @override
-  Future<void> delete(int id) async {
-    final isar = await _db;
-    final FooDto? foo = await isar.fooDtos.filter().idEqualTo(id).findFirst();
-    if (foo != null) {
+  Future delete(FooDto item) async {
+    try {
+      final isar = await _db;
       await isar.writeTxn(() async {
-        await isar.fooDtos.delete(foo.id);
+        await isar.fooDtos.delete(item.id);
       });
+      await deleteImageFromLocal(item.featuredImage);
+      await fetchAll();
+    } catch (e) {
+      return e;
     }
   }
 }
