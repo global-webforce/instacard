@@ -75,27 +75,28 @@ class FooDto with _$FooDto {
     return FooDto();
   }
 
-  FooDto view() {
-    return copyWith(colorPick: getColor, featuredImageUpload: getFeaturedImage);
-  }
-
   FooDto reset() {
     return FooDto(
         colorPick: const Color(defaultColor), featuredImageUpload: []);
   }
 
-  FooDto create() {
-    return copyWith(
-      color: colorPick?.value ?? defaultColor,
-      createdAt: Timestamp.now().toDate(),
+  Future<FooDto> fromForm() async {
+    FooDto item = this;
+    item = await saveFeaturedImage();
+    item = item.copyWith(color: colorPick?.value ?? defaultColor);
+    item = item.copyWith(
+      createdAt: hasValidId ? createdAt : Timestamp.now().toDate(),
+      updatedAt: hasValidId ? Timestamp.now().toDate() : updatedAt,
     );
+    return item;
   }
 
-  FooDto update() {
-    return copyWith(
-      color: colorPick?.value ?? defaultColor,
-      updatedAt: Timestamp.now().toDate(),
-    );
+  FooDto toForm() {
+    FooDto item = this;
+    item = item.copyWith(colorPick: Color(color), featuredImageUpload: [
+      if (featuredImage.isNotEmpty) SelectedFile.image(url: featuredImage)
+    ]);
+    return item;
   }
 
   factory FooDto.fromFirestore(

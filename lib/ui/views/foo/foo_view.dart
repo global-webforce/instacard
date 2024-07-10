@@ -38,7 +38,7 @@ class FooView extends StackedView<FooViewModel> {
           IconButton.filled(
               onPressed: () async {
                 await locator<NavigationService>()
-                    .navigateToFooSingleView(foo: FooDto().view());
+                    .navigateToFooSingleView(foo: FooDto());
               },
               icon: const Icon(Icons.add))
         ],
@@ -62,7 +62,7 @@ class FooView extends StackedView<FooViewModel> {
               itemBuilder: (context, i) {
                 return FooItem(onTap: () async {
                   await locator<NavigationService>()
-                      .navigateToFooSingleView(foo: viewModel.foos[i]);
+                      .navigateToFooSingleView(foo: viewModel.foos[i].toForm());
                 }, viewModel.foos[i], const Size(double.infinity, 238.0));
               },
             ),

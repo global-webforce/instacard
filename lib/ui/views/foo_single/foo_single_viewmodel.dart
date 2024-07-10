@@ -11,7 +11,7 @@ class FooSingleViewModel extends ReactiveViewModel {
 
   FooDto formModelOrig = FooDto();
   FooDto _formModel = FooDto();
-  FooDto get formModel => _formModel.view();
+  FooDto get formModel => _formModel;
   set formModel(FooDto f) {
     _formModel = f;
     rebuildUi();

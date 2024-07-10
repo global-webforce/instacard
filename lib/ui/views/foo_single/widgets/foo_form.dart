@@ -121,8 +121,6 @@ class FooForm extends StatelessWidget {
                                   ? () async {
                                       await locator<FooService>()
                                           .update(formModel.model);
-
-                                      formModel.updateValue(FooDto());
                                     }
                                   : null,
                               child: const Text('UPDATE'),

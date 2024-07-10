@@ -3,7 +3,6 @@ import 'package:instacard/models/foo_dto.dart';
 import 'package:instacard/ui/common/screen_scaffold.dart';
 import 'package:instacard/ui/views/foo_single/widgets/foo_form.dart';
 import 'package:stacked/stacked.dart';
-
 import 'foo_single_viewmodel.dart';
 
 class FooSingleView extends StackedView<FooSingleViewModel> {

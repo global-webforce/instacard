@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:instacard/models/foo_dto.dart';
 import 'package:isar/isar.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -36,9 +38,10 @@ class FooIsarService extends FooService implements InitializableDependency {
   Future create(FooDto item) async {
     try {
       final isar = await _db;
-      item = await item.saveFeaturedImage();
+      item = await item.fromForm();
+
       await isar.writeTxn(() async {
-        final id = await isar.fooDtos.put(item.create());
+        final id = await isar.fooDtos.put(item);
         item = item.copyWith(id: id);
       });
       return item;
@@ -51,10 +54,10 @@ class FooIsarService extends FooService implements InitializableDependency {
   Future update(FooDto item) async {
     final isar = await _db;
 
-    item = await item.saveFeaturedImage();
+    item = await item.fromForm();
 
     await isar.writeTxn(() async {
-      await isar.fooDtos.put(item.update()).then((id) async {
+      await isar.fooDtos.put(item).then((id) async {
         final FooDto? foo =
             await isar.fooDtos.filter().idEqualTo(id).findFirst();
         selectedItem = foo;
