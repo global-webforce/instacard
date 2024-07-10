@@ -25,15 +25,15 @@ class FooSingleViewModel extends ReactiveViewModel {
   }
 
   Future create(FooDto item) async {
-    final x = await _fooService.create(item);
-    formModelOriginal = x;
-    formModel = x;
+    final newItem = await _fooService.create(item);
+    formModelOriginal = newItem;
+    formModel = newItem;
   }
 
   Future update(FooDto item) async {
-    final x = await _fooService.create(item);
-    formModelOriginal = x;
-    formModel = x;
+    final newItem = await _fooService.create(item);
+    formModelOriginal = newItem;
+    formModel = newItem;
   }
 
   @override
