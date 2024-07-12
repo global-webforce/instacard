@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:instacard/app/app.logger.dart';
 import 'package:instacard/helpers/freezed_helpers.dart';
 import 'package:isar/isar.dart';
 import 'package:reactive_forms_annotations/reactive_forms_annotations.dart';
 import 'package:reactive_image_picker/reactive_image_picker.dart';
+import 'package:stacked/stacked_annotations.dart';
 part 'foo_dto.freezed.dart';
 part 'foo_dto.g.dart';
 part 'foo_dto.gform.dart';
@@ -69,8 +71,13 @@ class FooDto with _$FooDto {
 
   Future<FooDto> fromForm() async {
     FooDto item = this;
-    item = await saveFeaturedImage();
-    item = item.copyWith(color: colorPick?.value ?? defaultColor);
+
+    final featuredImagePath =
+        await saveImage(featuredImageUpload, featuredImage);
+
+    item = item.copyWith(
+        featuredImage: featuredImagePath,
+        color: colorPick?.value ?? defaultColor);
     item = item.copyWith(
       createdAt: hasValidId ? createdAt : Timestamp.now().toDate(),
       updatedAt: hasValidId ? Timestamp.now().toDate() : updatedAt,
@@ -94,54 +101,43 @@ class FooDto with _$FooDto {
       foo.toJson();
 
   /// Save the Files inside featuredImageUpload and assigns the file storage path on featuredImage.
-  Future<FooDto> saveFeaturedImage() async {
-    FooDto item = this;
-
-    bool hasPendingFiles() {
-      for (var i = 0; i < featuredImageUpload.length; i++) {
-        if (featuredImageUpload[i].file != null) {
-          return true;
+  Future<String> saveImage(List<SelectedFile> files, String path) async {
+    try {
+      bool hasPendingFiles() {
+        for (var i = 0; i < files.length; i++) {
+          if (files[i].file != null) {
+            return true;
+          }
         }
-      }
-      return false;
-    }
-
-    bool shouldSaveOnlyImage = hasPendingFiles() && featuredImage.isEmpty;
-    bool shouldUpdateImage =
-        hasValidId && hasPendingFiles() && featuredImage.isNotEmpty;
-    bool shouldDeleteImage =
-        featuredImageUpload.isEmpty && featuredImage.isNotEmpty;
-
-    if (shouldUpdateImage) {
-      List<String> filePaths = [];
-      for (var i = 0; i < featuredImageUpload.length; i++) {
-        if (featuredImageUpload[i].file != null) {
-          final filePath = await saveImageToLocal(featuredImageUpload[i].file);
-          filePaths.add(filePath);
-        }
-      }
-      await deleteImageFromLocal(featuredImage);
-
-      return copyWith(featuredImage: filePaths[0]);
-    }
-
-    if (shouldSaveOnlyImage) {
-      List<String> filePaths = [];
-      for (var i = 0; i < featuredImageUpload.length; i++) {
-        if (featuredImageUpload[i].file != null) {
-          final filePath = await saveImageToLocal(featuredImageUpload[i].file);
-          filePaths.add(filePath);
-        }
+        return false;
       }
 
-      return copyWith(featuredImage: filePaths[0]);
-    }
+      String filePath = "";
 
-    if (shouldDeleteImage) {
-      await deleteImageFromLocal(featuredImage);
-      return copyWith(featuredImage: "");
-    }
+      bool shouldSaveOnlyImage = hasPendingFiles() && path.isEmpty;
+      bool shouldUpdateImage =
+          hasValidId && hasPendingFiles() && path.isNotEmpty;
+      bool shouldDeleteImage = hasPendingFiles() == false && path.isNotEmpty;
 
-    return item;
+      if (shouldUpdateImage) {
+        filePath = await saveImageToLocal(files[0].file);
+        await deleteImageFromLocal(path);
+        return filePath;
+      }
+
+      if (shouldSaveOnlyImage) {
+        filePath = await saveImageToLocal(files[0].file);
+        return filePath;
+      }
+
+      if (shouldDeleteImage) {
+        await deleteImageFromLocal(path);
+        return "";
+      }
+
+      return path;
+    } catch (e) {
+      return path;
+    }
   }
 }

@@ -42,7 +42,7 @@ class ColorSerializer implements JsonConverter<Color, int> {
 
 /// Returns the image path after successful save.
 /// Eg: Image( image: FileImage(File(image_path)),
-Future saveImageToLocal(XFile? featuredImageUpload) async {
+Future<String> saveImageToLocal(XFile? featuredImageUpload) async {
   try {
     if (featuredImageUpload != null) {
       final dir = await getApplicationDocumentsDirectory();
@@ -64,6 +64,7 @@ Future saveImageToLocal(XFile? featuredImageUpload) async {
   } catch (e) {
     return "";
   }
+  return "";
 }
 
 Future deleteImageFromLocal(String filePath) async {
