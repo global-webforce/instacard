@@ -117,7 +117,7 @@ class FooDto with _$FooDto {
       bool shouldSaveOnlyImage = hasPendingFiles() && path.isEmpty;
       bool shouldUpdateImage =
           hasValidId && hasPendingFiles() && path.isNotEmpty;
-      bool shouldDeleteImage = hasPendingFiles() == false && path.isNotEmpty;
+      bool shouldDeleteImage = hasValidId && files.isEmpty && path.isNotEmpty;
 
       if (shouldUpdateImage) {
         filePath = await saveImageToLocal(files[0].file);
