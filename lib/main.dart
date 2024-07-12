@@ -10,6 +10,8 @@ import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import 'theme.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -36,8 +38,9 @@ class MainApp extends StatelessWidget {
       ],
       theme: ThemeData(
           brightness: Brightness.dark,
-          colorSchemeSeed: Colors.amber,
-          useMaterial3: false),
+          colorScheme: MaterialTheme.darkScheme(),
+          useMaterial3: true,
+          inputDecorationTheme: const InputDecorationTheme(filled: true)),
     );
   }
 }

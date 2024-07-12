@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'package:reactive_forms_annotations/reactive_forms_annotations.dart';
 import 'package:reactive_image_picker/reactive_image_picker.dart';
 
 int fastHash(String string) {
@@ -44,28 +43,27 @@ class ColorSerializer implements JsonConverter<Color, int> {
 /// Returns the image path after successful save.
 /// Eg: Image( image: FileImage(File(image_path)),
 Future saveImageToLocal(XFile? featuredImageUpload) async {
-  if (featuredImageUpload != null) {
-    final dir = await getApplicationDocumentsDirectory();
-    String fileName = path.basename(featuredImageUpload.name);
-    String filePath = path.join(dir.path, fileName);
+  try {
+    if (featuredImageUpload != null) {
+      final dir = await getApplicationDocumentsDirectory();
+      String fileName = path.basename(featuredImageUpload.name);
+      String filePath = path.join(dir.path, fileName);
 
-    // Check for filename collision and append timestamp if necessary
-    if (await File(filePath).exists()) {
-      String extension = path.extension(fileName);
-      String baseName = path.basenameWithoutExtension(fileName);
-      String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-      fileName = '${baseName}_$timestamp$extension';
-      filePath = path.join(dir.path, fileName);
-    }
+      // Check for filename collision and append timestamp if necessary
+      if (await File(filePath).exists()) {
+        String extension = path.extension(fileName);
+        String baseName = path.basenameWithoutExtension(fileName);
+        String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+        fileName = '${baseName}_$timestamp$extension';
+        filePath = path.join(dir.path, fileName);
+      }
 
-    try {
       await featuredImageUpload.saveTo(filePath);
       return filePath;
-    } catch (e) {
-      return "";
     }
+  } catch (e) {
+    return "";
   }
-  return "";
 }
 
 Future deleteImageFromLocal(String filePath) async {
@@ -77,7 +75,7 @@ Future deleteImageFromLocal(String filePath) async {
     }
     return "";
   } catch (e) {
-    return e;
+    return "";
   }
 }
 

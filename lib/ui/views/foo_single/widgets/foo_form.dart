@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:instacard/app/app.locator.dart';
+
 import 'package:instacard/helpers/freezed_helpers.dart';
 import 'package:instacard/models/foo_dto.dart';
-import 'package:instacard/services/foo_service.dart';
+
 import 'package:instacard/ui/common/ui_helpers.dart';
 import 'package:instacard/ui/views/foo_single/foo_single_viewmodel.dart';
 import 'package:reactive_color_picker/reactive_color_picker.dart';
@@ -29,7 +29,7 @@ class FooForm extends StatelessWidget {
               padding: const EdgeInsets.all(12.0),
               child: Column(
                 children: [
-                  ReactiveTextField<int>(
+                  /*    ReactiveTextField<int>(
                     formControl: formModel.idControl,
                     decoration: const InputDecoration(
                       labelText: 'ID',
@@ -39,6 +39,7 @@ class FooForm extends StatelessWidget {
                           'Title must not be empty',
                     },
                   ),
+                  vSpaceSmall,
                   ReactiveTextField<DateTime>(
                     formControl: formModel.createdAtControl,
                     decoration: const InputDecoration(
@@ -49,6 +50,7 @@ class FooForm extends StatelessWidget {
                           'Title must not be empty',
                     },
                   ),
+                  vSpaceSmall,
                   ReactiveTextField<DateTime>(
                     formControl: formModel.updatedAtControl,
                     decoration: const InputDecoration(
@@ -59,6 +61,7 @@ class FooForm extends StatelessWidget {
                           'Title must not be empty',
                     },
                   ),
+                  vSpaceSmall, */
                   ReactiveBlockColorPicker(
                     pickerColor: Colors.grey,
                     availableColors: const [
@@ -71,6 +74,7 @@ class FooForm extends StatelessWidget {
                     ],
                     formControl: formModel.colorPickControl,
                   ),
+                  vSpaceSmall,
                   ReactiveTextField<String>(
                     formControl: formModel.titleControl,
                     decoration: const InputDecoration(
@@ -81,6 +85,7 @@ class FooForm extends StatelessWidget {
                           'Title must not be empty',
                     },
                   ),
+                  vSpaceSmall,
                   ReactiveTextField<String>(
                     formControl: formModel.excerptControl,
                     maxLines: 3,
@@ -92,7 +97,7 @@ class FooForm extends StatelessWidget {
                           'Excerpt must not be empty',
                     },
                   ),
-                  vSpaceMedium,
+                  vSpaceSmall,
                   FeaturedImagePicker(
                     formControl: formModel.featuredImageUploadControl,
                   ),
@@ -217,8 +222,7 @@ class FeaturedImagePicker extends StatelessWidget {
       imageContainerDecoration: const BoxDecoration(color: Colors.amber),
       modes: const [ImagePickerMode.cameraImage, ImagePickerMode.galleryImage],
       decoration: const InputDecoration(
-          contentPadding: EdgeInsets.zero,
-          labelText: 'Image',
+          //   contentPadding: EdgeInsets.zero,
           filled: false,
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
@@ -283,9 +287,9 @@ class FeaturedImagePicker extends StatelessWidget {
                 )),
                 Align(
                   alignment: Alignment.topRight,
-                  child: IconButton(
+                  child: IconButton.filledTonal(
                       onPressed: () => handleDelete(context, image),
-                      icon: const Icon(color: Colors.red, Icons.close)),
+                      icon: const Icon(Icons.close)),
                 ),
               ],
             );

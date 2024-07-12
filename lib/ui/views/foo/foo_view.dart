@@ -35,7 +35,7 @@ class FooView extends StackedView<FooViewModel> {
         isBusy: viewModel.isBusy,
         title: "Instacard",
         actions: [
-          IconButton.filled(
+          IconButton.filledTonal(
               onPressed: () async {
                 await locator<NavigationService>()
                     .navigateToFooSingleView(foo: FooDto());

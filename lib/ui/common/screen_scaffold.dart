@@ -27,7 +27,7 @@ class ScreenScaffold extends StatelessWidget {
     final hasDrawer = ancestorScaffold != null && ancestorScaffold.hasDrawer;
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
+        // elevation: 0,
         // 3. add a non-null leading argument if we have a drawer
         automaticallyImplyLeading: hasDrawer || Navigator.canPop(context),
         leading: hasDrawer
