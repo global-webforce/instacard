@@ -29,6 +29,15 @@ dependencies:
   freezed: 2.5.2
   freezed_annotation: ^2.4.1
   reactive_color_picker: ^2.0.1
+  auto_size_text: ^3.0.0
+  qr_code_scanner: ^1.0.1
+  qr_flutter: ^4.1.0
+  screenshot: ^2.1.0
+  image_gallery_saver: ^2.0.3
+  flutter_contacts: ^1.1.7+1
+  reactive_links_picker:
+    path: packages/reactive_links_picker
+  collection: ^1.17.0
 
   
 dev_dependencies:

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:instacard/helpers/freezed_helpers.dart';
+import 'package:instacard/helpers/helpers.dart';
 import 'package:instacard/models/foo_dto.dart';
 
 import 'foo_service.dart';

@@ -1,4 +1,4 @@
-import 'package:instacard/helpers/freezed_helpers.dart';
+import 'package:instacard/helpers/helpers.dart';
 import 'package:instacard/models/foo_dto.dart';
 import 'package:isar/isar.dart';
 import 'package:stacked/stacked_annotations.dart';

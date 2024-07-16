@@ -15,6 +15,8 @@ import 'package:instacard/ui/views/foo/foo_view.dart';
 
 import 'package:instacard/ui/views/foo_single/foo_single_view.dart';
 
+import 'package:instacard/ui/views/card_viewer/card_viewer_view.dart';
+
 // @stacked-import
 @StackedApp(
   logger: StackedLogger(),
@@ -23,6 +25,7 @@ import 'package:instacard/ui/views/foo_single/foo_single_view.dart';
     MaterialRoute(page: StartupView),
     MaterialRoute(initial: true, page: FooView),
     MaterialRoute(page: FooSingleView),
+    MaterialRoute(page: CardViewerView),
 // @stacked-route
   ],
   dependencies: [

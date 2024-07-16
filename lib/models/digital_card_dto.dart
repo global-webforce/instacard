@@ -1,7 +1,9 @@
-import 'package:instacard/helpers/freezed_helpers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:instacard/helpers/helpers.dart';
 import 'package:isar/isar.dart';
 import 'package:reactive_forms_annotations/reactive_forms_annotations.dart';
+import 'package:reactive_image_picker/reactive_image_picker.dart';
 part 'digital_card_dto.freezed.dart';
 part 'digital_card_dto.g.dart';
 part 'digital_card_dto.gform.dart';
@@ -71,11 +73,44 @@ class DigitalCardDTO with _$DigitalCardDTO {
   @ignore
   get hasValidId => id >= 0 ? true : false;
 
-  factory DigitalCardDTO.blank() => DigitalCardDTO(
-        customLinks: [],
-      );
+  Future<DigitalCardDTO> fromForm() async {
+    DigitalCardDTO item = this;
+
+    final avatarImagePath = await saveImage(avatarFile, avatarUrl, hasValidId);
+    final logoImagePath = await saveImage(logoFile, logoUrl, hasValidId);
+
+    item = item.copyWith(
+        avatarUrl: avatarImagePath,
+        logoUrl: logoImagePath,
+        color: colorPick?.value ?? defaultColor);
+    item = item.copyWith(
+      createdAt: hasValidId ? createdAt : Timestamp.now().toDate(),
+      updatedAt: hasValidId ? Timestamp.now().toDate() : updatedAt,
+    );
+    return item;
+  }
+
+  DigitalCardDTO toForm() {
+    DigitalCardDTO item = this;
+    item = item.copyWith(colorPick: Color(color), logoFile: [
+      if (logoUrl.isNotEmpty) SelectedFile.image(url: logoUrl)
+    ], avatarFile: [
+      if (avatarUrl.isNotEmpty) SelectedFile.image(url: avatarUrl)
+    ]);
+    return item;
+  }
+
+  factory DigitalCardDTO.blank() => DigitalCardDTO();
 
   factory DigitalCardDTO.fromJson(Map<String, dynamic> json) =>
       _$DigitalCardDTOFromJson(json.map((key, value) => MapEntry(
           key, key == 'id' && value is String ? fastHash(value) : value)));
+
+  factory DigitalCardDTO.fromFirestore(
+          DocumentSnapshot snapshot, SnapshotOptions? options) =>
+      DigitalCardDTO.fromJson(snapshot.data() as Map<String, dynamic>);
+
+  static Map<String, Object?> toFirestore(
+          DigitalCardDTO foo, SetOptions? options) =>
+      foo.toJson();
 }
