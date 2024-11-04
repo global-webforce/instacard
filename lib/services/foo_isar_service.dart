@@ -38,7 +38,6 @@ class FooIsarService extends FooService implements InitializableDependency {
     try {
       final isar = await _db;
       item = await item.fromForm();
-
       await isar.writeTxn(() async {
         final id = await isar.fooDtos.put(item);
         item = item.copyWith(id: id);
